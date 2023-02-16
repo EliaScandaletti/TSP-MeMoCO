@@ -1,26 +1,30 @@
 #include <ilcplex/cplex.h>
+#include <vector>
 
 #include "instance.h"
 #include "solution.h"
-#include "solver.h"
+#include "solution/path.h"
 
 namespace TSP {
 
 namespace solver {
 
-class Flow : public Solver<Instance, Solution> {
+class Flow {
   int status;
   CPXENVptr env;
   CPXLPptr prob;
 
-  int _n;
+  unsigned int _n;
+  std::vector<std::vector<int>> x_idx;
+  std::vector<std::vector<int>> y_idx;
+  std::vector<std::vector<double>> cost;
 
 public:
   Flow(const Instance &);
   ~Flow();
-  virtual bool solve(const Instance &, Solution &) override;
+  virtual solution::Path solve();
 
-  virtual double evaluate(const Instance &, const Solution &) const override;
+  double evaluate(const Solution &) const;
 };
 
 } // namespace solver

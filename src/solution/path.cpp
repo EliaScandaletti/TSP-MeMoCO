@@ -18,7 +18,18 @@ Path::Path(const Instance &tsp) {
   sequence.push_back(0);
 }
 
+Path::Path(const std::vector<int> &seq) : sequence(seq) {}
+
+Path::Traveller::Traveller(const std::vector<int> &seq) : seq(seq), idx(0) {}
+
+int Path::Traveller::next() { return seq[idx++ % seq.size()]; }
+
 std::size_t TSP::solution::Path::size() const { return sequence.size(); }
+
+std::unique_ptr<TSP::Solution::Traveller>
+TSP::solution::Path::traveller() const {
+  return std::unique_ptr<TSP::Solution::Traveller>(new Traveller(sequence));
+}
 
 void TSP::solution::Path::print() const {
   std::cout << "[" << sequence[0];

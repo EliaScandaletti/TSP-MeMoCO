@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "solution/path.h"
-#include "solver.h"
 
 using TSP::solution::Path;
 
@@ -15,7 +14,7 @@ namespace solver {
 /**
  * Class that solves a TSP problem by neighbourdood search and 2-opt moves
  */
-class Opt2 : public Solver<Instance, Path> {
+class Opt2 {
 public:
   /**
    * Class representing substring reversal move
@@ -27,9 +26,9 @@ public:
 
   Opt2() = default;
 
-  double evaluate(const Instance &tsp, const Path &sol) const override;
+  double evaluate(const Instance &tsp, const Path &sol) const;
 
-  bool solve(const Instance &tsp, Path &bestSol) override;
+  bool solve(const Instance &tsp, Path &bestSol);
 
 protected:
   // TODO: declare here any "internal" method

@@ -5,6 +5,7 @@
 #include "instance/matrix.h"
 #include "solution/path.h"
 #include "solver/2opt.h"
+#include "solver/flow.h"
 
 using namespace TSP::instance;
 using namespace TSP::solution;
@@ -20,7 +21,7 @@ int main(int argc, char const *argv[]) {
       throw std::runtime_error("usage: ./main filename.dat");
 
     /// create the instance (reading data)
-    Matrix tspInstance(argv[1]);
+    Matrix instance(argv[1]);
 
     /// initialize clocks for running time recording
     ///   two ways:
@@ -32,28 +33,31 @@ int main(int argc, char const *argv[]) {
     gettimeofday(&tv1, NULL);
 
     /// create solver class
-    Opt2 tspSolver;
-    Path bestSolution(tspInstance);
+    // Opt2 solver;
+    Flow solver(instance);
 
     /// initial solution (random)
-    Path::randomize(bestSolution);
-    Path aSolution(bestSolution);
+    // Path bestSolution(instance);
+    // Path::randomize(bestSolution);
+    // Path aSolution(bestSolution);
 
     /// run the neighborhood search
-    tspSolver.solve(tspInstance, bestSolution);
+    // solver.solve(instance, bestSolution);
+    Path solution = solver.solve();
 
     /// final clocks
     t2 = clock();
     gettimeofday(&tv2, NULL);
 
-    std::cout << "FROM solution: ";
-    aSolution.print();
-    std::cout << "(value : " << tspSolver.evaluate(tspInstance, aSolution)
-              << ")\n";
-    std::cout << "TO   solution: ";
-    bestSolution.print();
-    std::cout << "(value : " << tspSolver.evaluate(tspInstance, bestSolution)
-              << ")\n";
+    // std::cout << "FROM solution: ";
+    // aSolution.print();
+    // std::cout << "(value : " << solver.evaluate(instance, aSolution) <<
+    // ")\n"; std::cout << "TO   solution: "; bestSolution.print(); std::cout <<
+    // "(value : " << solver.evaluate(instance, bestSolution)
+    //           << ")\n";
+    std::cout << "Found solution: ";
+    solution.print();
+    std::cout << "(value : " << solver.evaluate(solution) << ")\n";
     std::cout << "in "
               << (double)(tv2.tv_sec + tv2.tv_usec * 1e-6 -
                           (tv1.tv_sec + tv1.tv_usec * 1e-6))

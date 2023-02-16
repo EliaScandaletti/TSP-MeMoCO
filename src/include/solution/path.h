@@ -15,8 +15,20 @@ class Path : public Solution {
 public:
   Path(const Instance &tsp);
   Path(const Path &tspSol) = default;
+  Path(const std::vector<int> &seq);
+
+  class Traveller : public Solution::Traveller {
+    friend Path;
+    const std::vector<int> &seq;
+    size_t idx;
+    Traveller(const std::vector<int> &seq);
+
+  public:
+    int next() override;
+  };
 
   std::size_t size() const override;
+  std::unique_ptr<Solution::Traveller> traveller() const override;
   void print() const override;
   int get_nth(int) const;
 
