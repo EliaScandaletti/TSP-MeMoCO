@@ -1,6 +1,7 @@
 #ifndef TSP_SOLUTION_H
 #define TSP_SOLUTION_H
 
+#include <memory>
 #include <vector>
 
 #include "instance.h"
@@ -11,18 +12,20 @@ class Solution {
 
 public:
   virtual std::size_t size() const = 0;
-  // class Traveller {
-  //   Traveller();
+  class Traveller {
+  protected:
+    Traveller() = default;
 
-  // public:
-  //   virtual bool operator==(const Traveller &) = 0;
-  //   virtual Traveller operator++(int) = 0;
-  //   virtual Traveller &operator++() = 0;
-  //   virtual int operator*() const = 0;
-  //   virtual int operator->() const = 0;
-  // };
+  public:
+    virtual int next() = 0;
+    // virtual bool operator==(const Traveller &) = 0;
+    // virtual Traveller operator++(int) = 0;
+    // virtual Traveller &operator++() = 0;
+    // virtual int operator*() const = 0;
+    // virtual int operator->() const = 0;
+  };
 
-  // virtual Traveller travel() = 0;
+  virtual std::unique_ptr<Traveller> traveller() const = 0;
 
   virtual void print() const = 0;
 
