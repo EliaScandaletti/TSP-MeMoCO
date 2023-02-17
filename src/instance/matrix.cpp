@@ -14,7 +14,7 @@ void Matrix::read(const char *filename) {
   std::ifstream in(filename);
   // read size
   in >> _n;
-  std::cout << "number of nodes n = " << _n << std::endl;
+  // std::cout << "number of nodes n = " << _n << std::endl;
   // read costs
   _cost.resize(_n);
   for (int i = 0; i < _n; i++) {

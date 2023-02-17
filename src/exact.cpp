@@ -55,15 +55,17 @@ int main(int argc, char const *argv[]) {
     // ")\n"; std::cout << "TO   solution: "; bestSolution.print(); std::cout <<
     // "(value : " << solver.evaluate(instance, bestSolution)
     //           << ")\n";
-    std::cout << "Found solution: ";
-    solution.print();
-    std::cout << "(value : " << solver.evaluate(solution) << ")\n";
-    std::cout << "in "
-              << (double)(tv2.tv_sec + tv2.tv_usec * 1e-6 -
-                          (tv1.tv_sec + tv1.tv_usec * 1e-6))
-              << " seconds (user time)\n";
-    std::cout << "in " << (double)(t2 - t1) / CLOCKS_PER_SEC
-              << " seconds (CPU time)\n";
+    // std::cout << "Found solution: ";
+    // solution.print();
+    // std::cout << "(value : " << solver.evaluate(solution) << ")\n";
+    // std::cout << "in "
+    //           << (double)(tv2.tv_sec + tv2.tv_usec * 1e-6 -
+    //                       (tv1.tv_sec + tv1.tv_usec * 1e-6))
+    //           << " seconds (user time)\n";
+    // std::cout << "in " << (double)(t2 - t1) / CLOCKS_PER_SEC
+    //           << " seconds (CPU time)\n";
+    std::cout << instance.n() << "\t" << 0 << "\t"
+              << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
 
   } catch (std::exception &e) {
     std::cout << ">>>EXCEPTION: " << e.what() << std::endl;

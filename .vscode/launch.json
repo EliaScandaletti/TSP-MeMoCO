@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "cwd": "${workspaceRoot}/src/",
-            "program": "${workspaceRoot}/src/main",
+            "program": "${workspaceRoot}/src/exact",
             "args": ["../data/tsp4.dat"]
         }
     ]
