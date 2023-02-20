@@ -41,6 +41,17 @@ void TSP::solution::Path::print() const {
 
 int TSP::solution::Path::get_nth(int i) const { return sequence[i]; }
 
+void TSP::solution::Path::apply_move(const opt2 &m) {
+  int i = m.from, j = m.to;
+  while (i < j) {
+    int t = sequence[i];
+    sequence[i] = sequence[j];
+    sequence[j] = t;
+    ++i;
+    --j;
+  }
+}
+
 bool TSP::solution::Path::randomize(Path &sol) {
   srand(time(NULL));
   for (uint i = 1; i < sol.size(); ++i) {

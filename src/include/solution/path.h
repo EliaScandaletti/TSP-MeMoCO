@@ -16,6 +16,13 @@ public:
   Path(const Instance &tsp);
   Path(const Path &tspSol) = default;
   Path(const std::vector<int> &seq);
+  /**
+   * Class representing substring reversal move
+   */
+  struct opt2 {
+    int from;
+    int to;
+  };
 
   class Traveller : public Solution::Traveller {
     friend Path;
@@ -31,6 +38,7 @@ public:
   std::unique_ptr<Solution::Traveller> traveller() const override;
   void print() const override;
   int get_nth(int) const;
+  void apply_move(const opt2 &m);
 
   /**
    * set a solution as a random sequence by random swaps

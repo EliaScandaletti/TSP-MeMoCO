@@ -16,22 +16,11 @@ namespace solver {
  */
 class Tabu {
 public:
-  /**
-   * Class representing substring reversal move
-   */
-  struct move {
-    int from;
-    int to;
-  };
-
   Tabu() = default;
 
   double evaluate(const Instance &tsp, const Path &sol) const;
 
   bool solve(const Instance &tsp, Path &bestSol);
-
-protected:
-  // TODO: declare here any "internal" method
 };
 
 } // namespace solver

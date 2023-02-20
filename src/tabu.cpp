@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
     gettimeofday(&tv1, NULL);
 
     /// create solver class
-    Tabu solver();
+    Tabu solver;
 
     /// initial solution (random)
     Path solution(instance);
@@ -45,10 +45,9 @@ int main(int argc, char const *argv[]) {
     t2 = clock();
     gettimeofday(&tv2, NULL);
 
-    std::cout << "(value : " << solver.evaluate(instance, solution) << ")\n";
-    std::cout << "Found solution: ";
-    std::cout << "(value : " << solver.evaluate(solution) << ")\n";
-    std::cout << "\t" << (double)(t2 - t1) / CLOCKS_PER_SEC << "" << std::endl;
+    std::cout << argv[1] << "\t" << instance.n() << "\t"
+              << solver.evaluate(instance, solution) << "\t"
+              << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
 
   } catch (std::exception &e) {
     std::cout << ">>>EXCEPTION: " << e.what() << std::endl;

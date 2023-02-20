@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "cwd": "${workspaceRoot}/src/",
-            "program": "${workspaceRoot}/src/exact",
+            "program": "${workspaceRoot}/src/tabu",
             "args": ["../data/tsp4.dat"]
         }
     ]

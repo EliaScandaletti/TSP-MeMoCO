@@ -12,6 +12,8 @@ CPX_LDFLAGS = -lcplex -lm -pthread -ldl
 
 OBJ = instance/matrix.o solution/solution.o solution/path.o solver/tabu.o solver/flow.o
 
+all: exact tabu
+
 exact: $(OBJ)
 
 tabu: $(OBJ)
