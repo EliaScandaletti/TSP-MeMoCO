@@ -63,7 +63,8 @@ int main(int argc, char const *argv[]) {
     //           << " seconds (user time)\n";
     // std::cout << "in " << (double)(t2 - t1) / CLOCKS_PER_SEC
     //           << " seconds (CPU time)\n";
-    std::cout << instance.n() << "\t" << 0 << "\t"
+    std::cout << argv[1] << "\t" << instance.n() << "\t"
+              << solver.evaluate(solution) << "\t"
               << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
 
   } catch (std::exception &e) {
