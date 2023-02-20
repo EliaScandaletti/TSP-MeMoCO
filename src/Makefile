@@ -10,9 +10,11 @@ DEPENDENCIES = $(subst .cpp,.d,$(shell find . -name "*.cpp"))
 CPX_LIBDIR  = /opt/cplex/lib/x86-64_linux/static_pic
 CPX_LDFLAGS = -lcplex -lm -pthread -ldl
 
-OBJ = exact.o instance/matrix.o solution/solution.o solution/path.o solver/2opt.o solver/flow.o
+OBJ = instance/matrix.o solution/solution.o solution/path.o solver/tabu.o solver/flow.o
 
 exact: $(OBJ)
+
+tabu: $(OBJ)
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
@@ -20,10 +22,10 @@ exact: $(OBJ)
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-include $(DEPENDENCIES)
+# include $(DEPENDENCIES)
 
 .PHONY: clean
 clean:
-		rm -rf $(OBJ) exact
+		rm -rf $(OBJ) exact tabu
 		find . -name "*.d"  -exec rm {} \;
 

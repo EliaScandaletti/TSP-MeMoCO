@@ -1,10 +1,10 @@
-#include "solver/2opt.h"
+#include "solver/tabu.h"
 
 #include <iostream>
 
 using namespace TSP::solver;
 
-double Opt2::evaluate(const Instance &tsp, const Path &sol) const {
+double Tabu::evaluate(const Instance &tsp, const Path &sol) const {
   double total = 0.0;
   for (uint i = 0; i < sol.size() - 1; ++i) {
     int from = sol.get_nth(i);
@@ -14,7 +14,7 @@ double Opt2::evaluate(const Instance &tsp, const Path &sol) const {
   return total;
 }
 
-bool Opt2::solve(const Instance &tsp, Path &bestSol) {
+bool Tabu::solve(const Instance &tsp, Path &bestSol) {
   try {
     bool stop = false;
     // int iter = 0;

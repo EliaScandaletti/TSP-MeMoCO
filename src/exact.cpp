@@ -4,7 +4,6 @@
 
 #include "instance/matrix.h"
 #include "solution/path.h"
-#include "solver/2opt.h"
 #include "solver/flow.h"
 
 using namespace TSP::instance;

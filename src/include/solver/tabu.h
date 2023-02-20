@@ -14,7 +14,7 @@ namespace solver {
 /**
  * Class that solves a TSP problem by neighbourdood search and 2-opt moves
  */
-class Opt2 {
+class Tabu {
 public:
   /**
    * Class representing substring reversal move
@@ -24,7 +24,7 @@ public:
     int to;
   };
 
-  Opt2() = default;
+  Tabu() = default;
 
   double evaluate(const Instance &tsp, const Path &sol) const;
 
