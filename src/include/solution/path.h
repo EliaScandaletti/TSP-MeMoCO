@@ -29,6 +29,7 @@ public:
   /**
    * Struct representing a 2.5-opt move
    * https://www.cs.ubc.ca/~hutter/previous-earg/EmpAlgReadingGroup/TSP-JohMcg97.pdf
+   * Move the node `node` after the node `after`
    */
   struct opt2_5 {
     int node;
@@ -50,6 +51,7 @@ public:
   void print() const override;
   int get_nth(int) const;
   void apply_opt2(const opt2 &m);
+  void apply_opt2_5(const opt2_5 &m);
 
   /**
    * set a solution as a random sequence by random swaps

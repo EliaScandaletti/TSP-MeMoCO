@@ -54,6 +54,25 @@ void TSP::solution::Path::apply_opt2(const opt2 &m) {
   }
 }
 
+void TSP::solution::Path::apply_opt2_5(const opt2_5 &m) {
+  int i = m.node, j = m.after;
+  if (i < j) {
+    int temp = sequence[i];
+    while (i < j) {
+      sequence[i] = sequence[i + 1];
+      ++i;
+    }
+    sequence[i] = temp;
+  } else {
+    int temp = sequence[i];
+    while (i > j + 1) {
+      sequence[i] = sequence[i - 1];
+      --i;
+    }
+    sequence[i] = temp;
+  }
+}
+
 bool TSP::solution::Path::randomize(Path &sol) {
   srand(time(NULL));
   for (uint i = 1; i < sol.length(); ++i) {

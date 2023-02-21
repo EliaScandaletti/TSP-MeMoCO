@@ -20,7 +20,7 @@ public:
 
   double evaluate(const Instance &tsp, const Path &sol) const;
 
-  bool solve(const Instance &tsp, Path &bestSol);
+  bool solve(const Instance &tsp, Path &bestSol, size_t tabu_size, int max_iter);
 };
 
 } // namespace solver

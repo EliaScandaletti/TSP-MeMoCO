@@ -39,7 +39,7 @@ int main(int argc, char const *argv[]) {
     Path::randomize(solution);
 
     /// run the neighborhood search
-    solver.solve(instance, solution);
+    solver.solve(instance, solution, 8, 50);
 
     /// final clocks
     t2 = clock();

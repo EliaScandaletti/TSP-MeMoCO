@@ -8,9 +8,9 @@
             "name": "Make",
             "type": "cppdbg",
             "request": "launch",
-            "cwd": "${workspaceRoot}/src/",
+            "cwd": "${workspaceRoot}/",
             "program": "${workspaceRoot}/src/tabu",
-            "args": ["../data/tsp4.dat"]
+            "args": ["data/tsp60.dat"]
         }
     ]
 }
