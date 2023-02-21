@@ -1,5 +1,6 @@
 #include <ctime>
 #include <stdexcept>
+#include <string>
 #include <sys/time.h>
 
 #include "instance/matrix.h"
@@ -16,38 +17,40 @@ char errmsg[255];
 
 int main(int argc, char const *argv[]) {
   try {
-    if (argc < 2)
-      throw std::runtime_error("usage: ./main filename.dat");
+    if (argc < 4)
+      throw std::runtime_error(
+          "usage: ./main filename.dat tabu_length max_iter");
 
     /// create the instance (reading data)
     Matrix instance(argv[1]);
+    int tabu_length = std::stoi(argv[2]);
+    int max_iter = std::stoi(argv[3]);
 
-    /// initialize clocks for running time recording
-    ///   two ways:
-    ///   1) CPU time (t2 - t1)
+    // CPU time (t2 - t1)
     clock_t t1, t2;
-    t1 = clock();
-    ///   2) wall-clock time (tv2 - tv1)
-    struct timeval tv1, tv2;
-    gettimeofday(&tv1, NULL);
 
     /// create solver class
     Tabu solver;
 
     /// initial solution (random)
     Path solution(instance);
-    Path::randomize(solution);
 
-    /// run the neighborhood search
-    solver.solve(instance, solution, 8, 50);
-
-    /// final clocks
-    t2 = clock();
-    gettimeofday(&tv2, NULL);
-
-    std::cout << argv[1] << "\t" << instance.n() << "\t"
-              << solver.evaluate(instance, solution) << "\t"
-              << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
+    double cum_sol = 0;
+    double cum_iter = 0;
+    double cum_time = 0;
+    for (int j = 0; j < 10; j++) {
+      Path::randomize(solution);
+      t1 = clock();
+      /// run the neighborhood search
+      int iter = solver.solve(instance, solution, tabu_length, max_iter);
+      t2 = clock();
+      cum_sol += solver.evaluate(instance, solution);
+      cum_iter += iter;
+      cum_time += (double)(t2 - t1) / CLOCKS_PER_SEC;
+    }
+    std::cout << argv[1] << "\t" << instance.n() << "\t" << tabu_length << "\t"
+              << cum_sol / 10 << "\t" << cum_iter / 10 << "\t" << cum_time / 10
+              << std::endl;
 
   } catch (std::exception &e) {
     std::cout << ">>>EXCEPTION: " << e.what() << std::endl;
