@@ -3,6 +3,9 @@
 #include <iostream>
 #define STRINGIZE_HELPER(something) #something
 
+using TSP::solution::Path;
+using TSP::solver::Flow;
+
 bool error(int status) {
   if (status) {
     char errmsg[CPXMESSAGEBUFSIZE];
@@ -15,7 +18,7 @@ bool error(int status) {
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnarrowing"
-TSP::solver::Flow::Flow(const Instance &tsp)
+Flow::Flow(const Instance &tsp)
     : _n(tsp.n()), x_idx(_n, std::vector<int>(_n, -1)), y_idx(x_idx),
       cost(_n, std::vector<double>(_n, 0)) {
   env = CPXopenCPLEX(&status);
@@ -171,12 +174,12 @@ TSP::solver::Flow::Flow(const Instance &tsp)
 }
 #pragma GCC diagnostic pop
 
-TSP::solver::Flow::~Flow() {
+Flow::~Flow() {
   CPXfreeprob(env, &prob);
   CPXcloseCPLEX(&env);
 }
 
-TSP::solution::Path TSP::solver::Flow::solve() {
+TSP::solution::Path Flow::solve() {
   status = CPXmipopt(env, prob);
   if (error(status))
     return solution::Path(std::vector<int>());
@@ -198,20 +201,19 @@ TSP::solution::Path TSP::solver::Flow::solve() {
     }
     n = m;
   }
-  seq.push_back(n);
 
   return solution::Path(seq);
 }
 
-double TSP::solver::Flow::evaluate(const Solution &sol) const {
+double Flow::evaluate(const Path &sol) const {
   auto traveller = sol.traveller();
-  int n = traveller->next(); // = 0
-  int m = traveller->next();
+  int n = traveller.next(); // = 0
+  int m = traveller.next();
   double eval = 0;
   while (m != 0) {
     eval += cost[n][m];
     n = m;
-    m = traveller->next();
+    m = traveller.next();
   }
   return eval + cost[n][0];
 }

@@ -2,8 +2,9 @@
 #include <vector>
 
 #include "instance.h"
-#include "solution.h"
 #include "solution/path.h"
+
+using TSP::solution::Path;
 
 namespace TSP {
 
@@ -22,9 +23,9 @@ class Flow {
 public:
   Flow(const Instance &);
   ~Flow();
-  virtual solution::Path solve();
+  Path solve();
 
-  double evaluate(const Solution &) const;
+  double evaluate(const Path &) const;
 };
 
 } // namespace solver

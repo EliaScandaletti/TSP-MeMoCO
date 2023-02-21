@@ -64,8 +64,5 @@ bool TSP::solution::Path::randomize(Path &sol) {
     sol.sequence[idx1] = sol.sequence[idx2];
     sol.sequence[idx2] = tmp;
   }
-  // std::cout << "### ";
-  // sol.print();
-  // std::cout << " ###" << std::endl;
   return true;
 }
