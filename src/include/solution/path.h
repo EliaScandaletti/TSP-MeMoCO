@@ -1,14 +1,15 @@
 #ifndef TSP_SOLUTION_PATH_H
 #define TSP_SOLUTION_PATH_H
 
-#include "instance.h"
 #include <vector>
+
+#include "solution.h"
 
 namespace TSP {
 
 namespace solution {
 
-class Path {
+class Path : public Solution {
   std::vector<int> sequence;
 
 public:
@@ -38,16 +39,16 @@ public:
   class Traveller {
     friend Path;
     const std::vector<int> &seq;
-    std::size_t idx;
+    size_t idx;
     Traveller(const std::vector<int> &seq);
 
   public:
     int next();
   };
 
-  std::size_t length() const;
+  std::size_t length() const override;
   Traveller traveller() const;
-  void print() const;
+  void print() const override;
   int get_nth(int) const;
   void apply_opt2(const opt2 &m);
   void apply_opt2_5(const opt2_5 &m);
