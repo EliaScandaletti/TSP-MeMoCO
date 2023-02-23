@@ -24,7 +24,7 @@ tabu: $(OBJ)
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-# include $(DEPENDENCIES)
+include $(DEPENDENCIES)
 
 .PHONY: clean
 clean:
