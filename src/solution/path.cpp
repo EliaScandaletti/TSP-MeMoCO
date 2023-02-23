@@ -7,41 +7,28 @@
 
 #include "instance.h"
 
-using namespace TSP::solution;
 using TSP::Instance;
 
-Path::Path(const Instance &tsp) {
+TSP::solution::Path::Path(const Instance &tsp) {
   sequence.reserve(tsp.n());
   for (int i = 0; i < tsp.n(); ++i) {
     sequence.push_back(i);
   }
 }
 
-Path::Path(const std::vector<int> &seq) : sequence(seq) {}
+TSP::solution::Path::Path(const std::vector<int> &seq) : sequence(seq) {}
+
+std::size_t TSP::solution::Path::length() const { return sequence.size(); }
+
+int TSP::solution::Path::get_nth(int i) const {
+  i += sequence.size();
+  i %= sequence.size();
+  return sequence[i];
+}
 
 bool TSP::solution::Path::opt2::operator==(const opt2 &other) const {
   return from == other.from && to == other.to;
 }
-
-Path::Traveller::Traveller(const std::vector<int> &seq) : seq(seq), idx(0) {}
-
-int Path::Traveller::next() { return seq[idx++ % seq.size()]; }
-
-std::size_t TSP::solution::Path::length() const { return sequence.size(); }
-
-Path::Traveller TSP::solution::Path::traveller() const {
-  return Traveller(sequence);
-}
-
-void TSP::solution::Path::print() const {
-  std::cout << "[" << sequence[0];
-  for (uint i = 1; i < length(); i++) {
-    std::cout << " " << sequence[i];
-  }
-  std::cout << " " << sequence[0] << "]";
-}
-
-int TSP::solution::Path::get_nth(int i) const { return sequence[i]; }
 
 void TSP::solution::Path::apply_opt2(const opt2 &m) {
   int i = m.from, j = m.to;
@@ -84,4 +71,20 @@ bool TSP::solution::Path::randomize(Path &sol) {
     sol.sequence[idx2] = tmp;
   }
   return true;
+}
+
+void TSP::solution::Path::print() const {
+  std::cout << "[" << sequence[0];
+  for (uint i = 1; i < length(); i++) {
+    std::cout << " " << sequence[i];
+  }
+  std::cout << " " << sequence[0] << "]";
+}
+
+TSP::solution::Path::Traveller::Traveller(const std::vector<int> &seq) : seq(seq), idx(0) {}
+
+int TSP::solution::Path::Traveller::next() { return seq[idx++ % seq.size()]; }
+
+TSP::solution::Path::Traveller TSP::solution::Path::traveller() const {
+  return Traveller(sequence);
 }

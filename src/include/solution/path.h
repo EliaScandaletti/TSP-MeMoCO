@@ -17,6 +17,10 @@ public:
   Path(const Path &tspSol) = default;
   Path(const std::vector<int> &seq);
 
+  std::size_t length() const override;
+
+  int get_nth(int) const;
+
   /**
    * Class representing substring reversal move
    */
@@ -25,6 +29,7 @@ public:
     int to;
     bool operator==(const opt2 &other) const;
   };
+  void apply_opt2(const opt2 &m);
 
   /**
    * Struct representing a 2.5-opt move
@@ -35,22 +40,6 @@ public:
     int node;
     int after;
   };
-
-  class Traveller {
-    friend Path;
-    const std::vector<int> &seq;
-    size_t idx;
-    Traveller(const std::vector<int> &seq);
-
-  public:
-    int next();
-  };
-
-  std::size_t length() const override;
-  Traveller traveller() const;
-  void print() const override;
-  int get_nth(int) const;
-  void apply_opt2(const opt2 &m);
   void apply_opt2_5(const opt2_5 &m);
 
   /**
@@ -59,6 +48,18 @@ public:
    * @return true if everything OK, false otherwise
    */
   static bool randomize(Path &sol);
+  void print() const;
+
+  class Traveller {
+    friend Path;
+    const std::vector<int> &seq;
+    std::size_t idx;
+    Traveller(const std::vector<int> &seq);
+
+  public:
+    int next();
+  };
+  Traveller traveller() const;
 };
 
 } // namespace solution
