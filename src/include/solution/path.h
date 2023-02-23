@@ -18,6 +18,7 @@ public:
   Path(const std::vector<int> &seq);
 
   std::size_t length() const override;
+  double evaluate(const Instance &tsp) const override;
 
   int get_nth(int) const;
 
