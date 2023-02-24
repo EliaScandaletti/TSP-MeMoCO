@@ -22,12 +22,13 @@ std::size_t TSP::solution::Path::length() const { return sequence.size(); }
 
 double TSP::solution::Path::evaluate(const Instance &tsp) const {
   double total = 0.0;
-  for (uint i = 0; i < length() - 1; ++i) {
+  uint i;
+  for (i = 0; i < length() - 1; ++i) {
     int from = get_nth(i);
     int to = get_nth(i + 1);
     total += tsp.cost(from, to);
   }
-  return total;
+  return total + tsp.cost(get_nth(i), get_nth(0));
 }
 
 int TSP::solution::Path::get_nth(int i) const {
@@ -91,7 +92,8 @@ void TSP::solution::Path::print() const {
   std::cout << " " << sequence[0] << "]";
 }
 
-TSP::solution::Path::Traveller::Traveller(const std::vector<int> &seq) : seq(seq), idx(0) {}
+TSP::solution::Path::Traveller::Traveller(const std::vector<int> &seq)
+    : seq(seq), idx(0) {}
 
 int TSP::solution::Path::Traveller::next() { return seq[idx++ % seq.size()]; }
 
