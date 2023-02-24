@@ -10,12 +10,10 @@ using TSP::Instance;
 double evaluate_opt2(const Instance &tsp, const Path &currSol,
                      const Path::opt2 &m) {
   int i = m.from, j = m.to;
-  int ip = i > 0 ? i - 1 : tsp.n() - 1;
-  int jn = j < tsp.n() - 2 ? j + 1 : 0;
-  return -tsp.cost(currSol.get_nth(ip), currSol.get_nth(i))   // - c_{i-1, i}
-         - tsp.cost(currSol.get_nth(j), currSol.get_nth(jn))  // - c_{j, j+1}
-         + tsp.cost(currSol.get_nth(ip), currSol.get_nth(j))  // + c_{i-1, j}
-         + tsp.cost(currSol.get_nth(i), currSol.get_nth(jn)); // + c_{i, j+1}
+  return -tsp.cost(currSol.get_nth(i - 1), currSol.get_nth(i))   // - c_{i-1, i}
+         - tsp.cost(currSol.get_nth(j), currSol.get_nth(j + 1))  // - c_{j, j+1}
+         + tsp.cost(currSol.get_nth(i - 1), currSol.get_nth(j))  // + c_{i-1, j}
+         + tsp.cost(currSol.get_nth(i), currSol.get_nth(j + 1)); // + c_{i, j+1}
 }
 
 bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
@@ -47,15 +45,13 @@ bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
 double evaluate_opt2_5(const Instance &tsp, const Path &currSol,
                        const Path::opt2_5 &m) {
   int i = m.node, j = m.after;
-  int ip = i > 0 ? i - 1 : tsp.n() - 1;
-  int in = i < tsp.n() - 2 ? i + 1 : 0;
-  int jn = j < tsp.n() - 2 ? j + 1 : 0;
-  return -tsp.cost(currSol.get_nth(ip), currSol.get_nth(i))   // - c_{i-1, i}
-         - tsp.cost(currSol.get_nth(i), currSol.get_nth(in))  // - c_{i, i+1}
-         + tsp.cost(currSol.get_nth(ip), currSol.get_nth(in)) // + c_{i-1, i+1}
-         - tsp.cost(currSol.get_nth(j), currSol.get_nth(jn))  // - c_{j, j+1}
-         + tsp.cost(currSol.get_nth(j), currSol.get_nth(i))   // + c_{j, i}
-         + tsp.cost(currSol.get_nth(i), currSol.get_nth(jn)); // + c_{i, j+1}
+  return -tsp.cost(currSol.get_nth(i - 1), currSol.get_nth(i))  // - c_{i-1, i}
+         - tsp.cost(currSol.get_nth(i), currSol.get_nth(i + 1)) // - c_{i, i+1}
+         + tsp.cost(currSol.get_nth(i - 1),
+                    currSol.get_nth(i + 1)) // + c_{i-1, i+1}
+         - tsp.cost(currSol.get_nth(j), currSol.get_nth(j + 1))  // - c_{j, j+1}
+         + tsp.cost(currSol.get_nth(j), currSol.get_nth(i))      // + c_{j, i}
+         + tsp.cost(currSol.get_nth(i), currSol.get_nth(j + 1)); // + c_{i, j+1}
 }
 
 bool next_opt2_5(const Instance &tsp, const Path &currSol, Path::opt2_5 &m) {
