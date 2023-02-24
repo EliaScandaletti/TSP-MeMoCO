@@ -48,21 +48,6 @@ int main(int argc, char const *argv[]) {
     t2 = clock();
     gettimeofday(&tv2, NULL);
 
-    // std::cout << "FROM solution: ";
-    // aSolution.print();
-    // std::cout << "(value : " << solver.evaluate(instance, aSolution) <<
-    // ")\n"; std::cout << "TO   solution: "; bestSolution.print(); std::cout <<
-    // "(value : " << solver.evaluate(instance, bestSolution)
-    //           << ")\n";
-    // std::cout << "Found solution: ";
-    // solution.print();
-    // std::cout << "(value : " << solver.evaluate(solution) << ")\n";
-    // std::cout << "in "
-    //           << (double)(tv2.tv_sec + tv2.tv_usec * 1e-6 -
-    //                       (tv1.tv_sec + tv1.tv_usec * 1e-6))
-    //           << " seconds (user time)\n";
-    // std::cout << "in " << (double)(t2 - t1) / CLOCKS_PER_SEC
-    //           << " seconds (CPU time)\n";
     std::cout << argv[1] << "\t" << instance.n() << "\t"
               << solver.evaluate(solution) << "\t"
               << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
