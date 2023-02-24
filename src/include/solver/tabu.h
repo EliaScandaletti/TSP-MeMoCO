@@ -18,8 +18,6 @@ class Tabu {
 public:
   Tabu() = default;
 
-  double evaluate(const Instance &tsp, const Path &sol) const;
-
   int solve(const Instance &tsp, Path &bestSol, std::size_t tabu_size, int max_iter);
 };
 

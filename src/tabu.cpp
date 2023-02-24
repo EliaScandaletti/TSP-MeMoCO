@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
       /// run the neighborhood search
       int iter = solver.solve(instance, solution, tabu_length, max_iter);
       t2 = clock();
-      cum_sol += solver.evaluate(instance, solution);
+      cum_sol += solution.evaluate(instance);
       cum_iter += iter;
       cum_time += (double)(t2 - t1) / CLOCKS_PER_SEC;
     }

@@ -7,16 +7,6 @@
 using namespace TSP::solver;
 using TSP::Instance;
 
-double Tabu::evaluate(const Instance &tsp, const Path &sol) const {
-  double total = 0.0;
-  for (uint i = 0; i < sol.length() - 1; ++i) {
-    int from = sol.get_nth(i);
-    int to = sol.get_nth(i + 1);
-    total += tsp.cost(from, to);
-  }
-  return total;
-}
-
 double evaluate_opt2(const Instance &tsp, const Path &currSol,
                      const Path::opt2 &m) {
   int i = m.from, j = m.to;
@@ -96,7 +86,7 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
 
   Path curr_sol = sol;
   double best_val, curr_val;
-  best_val = curr_val = evaluate(tsp, curr_sol);
+  best_val = curr_val = curr_sol.evaluate(tsp);
 
   std::deque<Path::opt2> tabu_list;
 

@@ -22,13 +22,11 @@ std::size_t TSP::solution::Path::length() const { return sequence.size(); }
 
 double TSP::solution::Path::evaluate(const Instance &tsp) const {
   double total = 0.0;
-
   for (uint i = 0; i < length() - 1; ++i) {
     int from = get_nth(i);
     int to = get_nth(i + 1);
     total += tsp.cost(from, to);
   }
-
   return total;
 }
 
