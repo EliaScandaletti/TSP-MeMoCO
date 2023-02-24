@@ -217,3 +217,11 @@ double Flow::evaluate(const Path &sol) const {
   }
   return eval + cost[n][0];
 }
+
+double Flow::evaluate() const {
+  double eval;
+  int status = CPXgetobjval(env, prob, &eval);
+  if (error(status))
+    return 0.0;
+  return eval;
+}

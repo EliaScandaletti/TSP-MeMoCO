@@ -26,6 +26,7 @@ public:
   Path solve();
 
   double evaluate(const Path &) const;
+  double evaluate() const;
 };
 
 } // namespace solver
