@@ -1,13 +1,15 @@
 CXX = g++
 CC = g++
-CPPFLAGS = -Iinclude -I/opt/cplex/include
+CPPFLAGS = -Iinclude -I$(CPX_INCLUDE)
 CXXFLAGS = -Wall -Wextra -Werror -g
 LDFLAGS = -L$(CPX_LIBDIR)
 LDLIBS = $(CPX_LDFLAGS)
 
 DEPENDENCIES = $(subst .cpp,.d,$(shell find . -name "*.cpp"))
 
-CPX_LIBDIR  = /opt/cplex/lib/x86-64_linux/static_pic
+CPX_FOLDER = /opt/ibm/ILOG/CPLEX_Studio128/cplex
+CPX_INCLUDE = $(CPX_FOLDER)/include
+CPX_LIBDIR  = $(CPX_FOLDER)/lib/x86-64_linux/static_pic
 CPX_LDFLAGS = -lcplex -lm -pthread -ldl
 
 OBJ = instance/matrix.o solution/solution.o solution/path.o solver/tabu.o solver/flow.o
