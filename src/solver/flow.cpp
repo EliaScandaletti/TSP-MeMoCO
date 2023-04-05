@@ -196,7 +196,7 @@ TSP::solution::Path Flow::solve() {
   while (n != 0 || seq.empty()) {
     seq.push_back(n);
     int m = 0;
-    while (n == m || sol[y_idx[n][m]] == 0) {
+    while (n == m || sol[y_idx[n][m]] < 0.5) {
       m++;
     }
     n = m;
