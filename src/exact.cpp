@@ -36,7 +36,7 @@ int main(int argc, char const *argv[]) {
     t2 = clock();
 
     std::cout << argv[1] << "\t" << instance.n() << "\t"
-              << solver.evaluate(solution) << "\t"
+              << solver.evaluate() << "\t"
               << (double)(t2 - t1) / CLOCKS_PER_SEC << std::endl;
 
   } catch (std::exception &e) {

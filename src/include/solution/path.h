@@ -50,17 +50,6 @@ public:
    */
   static bool randomize(Path &sol);
   void print() const;
-
-  class Traveller {
-    friend Path;
-    const std::vector<int> &seq;
-    std::size_t idx;
-    Traveller(const std::vector<int> &seq);
-
-  public:
-    int next();
-  };
-  Traveller traveller() const;
 };
 
 } // namespace solution

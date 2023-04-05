@@ -205,19 +205,6 @@ TSP::solution::Path Flow::solve() {
   return solution::Path(seq);
 }
 
-double Flow::evaluate(const Path &sol) const {
-  auto traveller = sol.traveller();
-  int n = traveller.next(); // = 0
-  int m = traveller.next();
-  double eval = 0;
-  while (m != 0) {
-    eval += cost[n][m];
-    n = m;
-    m = traveller.next();
-  }
-  return eval + cost[n][0];
-}
-
 double Flow::evaluate() const {
   double eval;
   int status = CPXgetobjval(env, prob, &eval);

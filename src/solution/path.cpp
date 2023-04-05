@@ -91,12 +91,3 @@ void TSP::solution::Path::print() const {
   }
   std::cout << " " << sequence[0] << "]";
 }
-
-TSP::solution::Path::Traveller::Traveller(const std::vector<int> &seq)
-    : seq(seq), idx(0) {}
-
-int TSP::solution::Path::Traveller::next() { return seq[idx++ % seq.size()]; }
-
-TSP::solution::Path::Traveller TSP::solution::Path::traveller() const {
-  return Traveller(sequence);
-}
