@@ -22,31 +22,18 @@ int main(int argc, char const *argv[]) {
     /// create the instance (reading data)
     Matrix instance(argv[1]);
 
-    /// initialize clocks for running time recording
-    ///   two ways:
-    ///   1) CPU time (t2 - t1)
+    ///  CPU time (t2 - t1)
     clock_t t1, t2;
     t1 = clock();
-    ///   2) wall-clock time (tv2 - tv1)
-    struct timeval tv1, tv2;
-    gettimeofday(&tv1, NULL);
 
     /// create solver class
-    // Opt2 solver;
     Flow solver(instance);
 
-    /// initial solution (random)
-    // Path bestSolution(instance);
-    // Path::randomize(bestSolution);
-    // Path aSolution(bestSolution);
-
     /// run the neighborhood search
-    // solver.solve(instance, bestSolution);
     Path solution = solver.solve();
 
     /// final clocks
     t2 = clock();
-    gettimeofday(&tv2, NULL);
 
     std::cout << argv[1] << "\t" << instance.n() << "\t"
               << solver.evaluate(solution) << "\t"
