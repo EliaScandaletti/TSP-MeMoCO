@@ -25,7 +25,6 @@ public:
   ~Flow();
   Path solve();
 
-  double evaluate(const Path &) const;
   double evaluate() const;
 };
 
