@@ -10,7 +10,11 @@
             "request": "launch",
             "cwd": "${workspaceRoot}/",
             "program": "${workspaceRoot}/src/tabu",
-            "args": ["data/tsp60.dat"]
+            "args": [
+                "data/tsp60.dat",
+                "8",
+                "1000"
+            ]
         }
     ]
 }
