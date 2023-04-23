@@ -12,7 +12,7 @@ CPX_INCLUDE = $(CPX_FOLDER)/include
 CPX_LIBDIR  = $(CPX_FOLDER)/lib/x86-64_linux/static_pic
 CPX_LDFLAGS = -lcplex -lm -pthread -ldl
 
-OBJ = instance/matrix.o solution/solution.o solution/path.o solver/tabu.o solver/flow.o
+OBJ = instance/matrix.o solution/solution.o solution/path.o solver/tabu.o solver/farthest.o solver/flow.o
 
 all: exact tabu
 

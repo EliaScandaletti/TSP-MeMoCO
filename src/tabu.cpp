@@ -5,6 +5,7 @@
 
 #include "instance/matrix.h"
 #include "solution/path.h"
+#include "solver/farthest.h"
 #include "solver/tabu.h"
 
 using namespace TSP::instance;
@@ -30,19 +31,18 @@ int main(int argc, char const *argv[]) {
     clock_t t1, t2;
 
     /// create solver class
-    Tabu solver;
-
-    /// initial solution (random)
-    Path solution(instance);
+    Tabu tabu_solver;
+    FarthestInsertion far_ins_solver;
 
     double cum_sol = 0;
     double cum_iter = 0;
     double cum_time = 0;
     for (int j = 0; j < 10; j++) {
-      Path::randomize(solution);
+      /// initial solution
+      Path solution = far_ins_solver.solve(instance);
       t1 = clock();
       /// run the neighborhood search
-      int iter = solver.solve(instance, solution, tabu_length, max_iter);
+      int iter = tabu_solver.solve(instance, solution, tabu_length, max_iter);
       t2 = clock();
       cum_sol += solution.evaluate(instance);
       cum_iter += iter;
