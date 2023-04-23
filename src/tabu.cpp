@@ -18,14 +18,15 @@ char errmsg[255];
 
 int main(int argc, char const *argv[]) {
   try {
-    if (argc < 4)
+    if (argc < 5)
       throw std::runtime_error(
-          "usage: ./main filename.dat tabu_length max_iter");
+          "usage: ./main filename.dat tabu_length max_non_imp_iter max_iter");
 
     /// create the instance (reading data)
     Matrix instance(argv[1]);
     int tabu_length = std::stoi(argv[2]);
-    int max_iter = std::stoi(argv[3]);
+    int max_non_imp_iter = std::stoi(argv[3]);
+    int max_iter = std::stoi(argv[4]);
 
     // CPU time (t2 - t1)
     clock_t t1, t2;
@@ -37,19 +38,20 @@ int main(int argc, char const *argv[]) {
     double cum_sol = 0;
     double cum_iter = 0;
     double cum_time = 0;
-    for (int j = 0; j < 10; j++) {
+    for (int j = 0; j < 1; j++) {
       /// initial solution
       Path solution = far_ins_solver.solve(instance);
       t1 = clock();
       /// run the neighborhood search
-      int iter = tabu_solver.solve(instance, solution, tabu_length, max_iter);
+      int iter = tabu_solver.solve(instance, solution, tabu_length,
+                                   max_non_imp_iter, max_iter);
       t2 = clock();
       cum_sol += solution.evaluate(instance);
       cum_iter += iter;
       cum_time += (double)(t2 - t1) / CLOCKS_PER_SEC;
     }
     std::cout << argv[1] << "\t" << instance.n() << "\t" << tabu_length << "\t"
-              << cum_sol / 10 << "\t" << cum_iter / 10 << "\t" << cum_time / 10
+              << cum_sol / 1 << "\t" << cum_iter / 1 << "\t" << cum_time / 1
               << std::endl;
 
   } catch (std::exception &e) {

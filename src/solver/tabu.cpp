@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <deque>
-#include <iostream>
+#include <limits>
 
 using namespace TSP::solver;
 using TSP::Instance;
@@ -18,21 +18,17 @@ double evaluate_opt2(const Instance &tsp, const Path &currSol,
 
 bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
                const std::deque<Path::opt2> &tabu, double acc_inc) {
-  double best_inc = -1e-6;
+  double best_inc = std::numeric_limits<double>::infinity();
   bool found = false;
   for (int i = 1; i < tsp.n() - 1; i++) {
     for (int j = i + 1; j < tsp.n(); j++) {
       Path::opt2 mov = {i, j};
       double inc = evaluate_opt2(tsp, currSol, mov);
 
-      if (inc >= acc_inc) {
-        bool is_tabu = std::find(tabu.begin(), tabu.end(), mov) != tabu.end();
-        if (is_tabu) {
-          continue;
-        }
-      }
+      bool is_tabu = inc >= acc_inc &&
+                     std::find(tabu.begin(), tabu.end(), mov) != tabu.end();
 
-      if (inc < best_inc) {
+      if (!is_tabu && inc < best_inc) {
         best_inc = inc;
         m = mov;
         found = true;
@@ -76,9 +72,10 @@ bool next_opt2_5(const Instance &tsp, const Path &currSol, Path::opt2_5 &m) {
 };
 
 int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
-                int max_iter) {
-  bool stop = false;
+                int max_non_imp_iter, int max_iter) {
+  bool local_minima = false;
   int iter = 0;
+  int non_imp_iter = 0;
 
   Path curr_sol = sol;
   double best_val, curr_val;
@@ -86,15 +83,16 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
 
   std::deque<Path::opt2> tabu_list;
 
-  while (!stop && iter < max_iter) {
-    stop = true;
+  while (!local_minima && non_imp_iter < max_non_imp_iter && iter < max_iter) {
+    local_minima = true;
 
     Path::opt2 m2;
     bool does_move =
         next_opt2(tsp, curr_sol, m2, tabu_list, best_val - curr_val);
-    while (does_move && iter < max_iter) {
-      stop = false;
+    while (does_move && non_imp_iter < max_non_imp_iter && iter < max_iter) {
+      local_minima = false;
       ++iter;
+      ++non_imp_iter;
 
       // apply the move
       curr_val += evaluate_opt2(tsp, curr_sol, m2);
@@ -103,24 +101,27 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
       tabu_list.push_back(m2);
       if (tabu_list.size() > tabu_size)
         tabu_list.pop_front();
+
       // check if curr_sol is the best so far
       if (curr_val < best_val) {
         best_val = curr_val;
         sol = curr_sol;
+        non_imp_iter = 0;
       }
       // find next move
       does_move = next_opt2(tsp, curr_sol, m2, tabu_list, best_val - curr_val);
     }
 
     // either there is a local minimum or max_iter reached
-    if (iter < max_iter) {
+    if (non_imp_iter < max_non_imp_iter && iter < max_iter) {
       // uses 2.5-opt to move past the local minimum
       Path::opt2_5 m2_5;
       does_move = next_opt2_5(tsp, curr_sol, m2_5);
 
       if (does_move) {
-        stop = false;
+        local_minima = false;
         ++iter;
+        ++non_imp_iter;
         // apply the move
         curr_val += evaluate_opt2_5(tsp, curr_sol, m2_5);
         curr_sol.apply_opt2_5(m2_5);
@@ -128,6 +129,7 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
         if (curr_val < best_val) {
           best_val = curr_val;
           sol = curr_sol;
+          non_imp_iter = 0;
         }
       }
     }

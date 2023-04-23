@@ -18,7 +18,8 @@ class Tabu {
 public:
   Tabu() = default;
 
-  int solve(const Instance &tsp, Path &bestSol, std::size_t tabu_size, int max_iter);
+  int solve(const Instance &tsp, Path &bestSol, std::size_t tabu_size,
+            int max_non_dec_iter, int max_iter);
 };
 
 } // namespace solver
