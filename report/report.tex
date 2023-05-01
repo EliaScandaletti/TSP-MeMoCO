@@ -11,7 +11,25 @@
 \maketitle
 
 \section{Introduction}
-\paragraph{Problem description}
+
+This project consists in the development and comparison of two methods to solve the Traveling Salesman Problem in a specific domain, namely the drilling of holes in electric panel boards.
+In particular, the problem consists in minimizing the time the drill needs to prepare each board.
+Since the time it takes to drill a single hole is assumed to be constant, the problem is equivalent to minimizing the time needed to move the drill through each hole position.
+
+The first method is based on a mixed integer linear programming formulation of the problem and always yield the optimal solution.
+The second approach, instead, uses an heuristic method which may result in suboptimal solutions but should require a shorter time.
+
+The first method uses the CPLEX library, whereas the second one leverages tabu search.
+Both of them are implemented using C++.
+
+\paragraph{Domain Characteristics and Assumptions}
+The domain of the problem being restricted to the movement of a drill on electric panel boards allows to assume some realistic characteristics of the problem:
+\begin{itemize}
+    \item holes are aligned in a grid, likely in rectangular shapes;
+    \item the number of holes on each board is between 10 and 250.
+\end{itemize}
+A further assumption is that the drill can move at constant speed in any direction.
+We therefore assume that the time needed to move the drill from a hole to the next one is proportional to the linear distance between the two.
 
 \section{Exact Method}
 
