@@ -1,5 +1,8 @@
 \documentclass{article}
 
+\usepackage{amsmath}
+\usepackage{amssymb}
+
 \title{
     Project Report
     \\ \Large
@@ -24,6 +27,15 @@ On the other hand, it should require less computational resources, such as time,
 
 The first method uses the CPLEX library, whereas the second one leverages tabu search.
 Both of them are implemented using C++.
+
+\paragraph{Notation}
+In the rest of the report we will be using the following symbol with the meaning described below:
+\begin{itemize}
+    \item[$N$:] the nodes in the graph representation of the problem, i.e. the set of holes on the board.
+    \item[$A$:] the arcs in the graph representation of the problem, i.e. the possible moves between two holes.
+    \item[$c_{i j}$:] the cost of traveling over an arc, i.e. the time the drill takes to move from hole $i$ to hole $j$.
+    \item[$0$:] an arbitrary node from which the traveler starts, i.e. the first hole to be drilled.
+\end{itemize}
 
 \paragraph{Domain Characteristics and Assumptions}
 The domain of the problem being restricted to the movement of a drill on electric panel boards allows to assume some realistic characteristics of the problem:
