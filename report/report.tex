@@ -18,8 +18,9 @@ This project consists in the development and comparison of two methods to solve 
 In particular, the problem consists in minimizing the time the drill needs to prepare each board.
 Since the time it takes to drill a single hole is assumed to be constant, the problem is equivalent to minimizing the time needed to move the drill through each hole position.
 
-The first method is based on a mixed integer linear programming formulation of the problem and always yield the optimal solution.
-The second approach, instead, uses an heuristic method which may result in suboptimal solutions but should require a shorter time.
+The first method is based on a mixed integer linear programming formulation of the problem and always yield an optimal solution.
+The second approach, instead, uses an heuristic method which may result in suboptimal solutions.
+On the other hand, it should require less computational resources, such as time, threads and memory.
 
 The first method uses the CPLEX library, whereas the second one leverages tabu search.
 Both of them are implemented using C++.
