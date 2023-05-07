@@ -49,6 +49,37 @@ We therefore assume that the time needed to move the drill from a hole to the ne
 \section{Exact Method}
 
 \subsection{MILP Formulation}
+The exact method uses the following mathematical formulation of the problem.
+\begin{align}
+    \min & \sum_{i,j : (i,j) \in A} c_{i j} y_{i j}                                                                                                 \\
+    \label{MILP:consume}
+    s.t. & \sum_{i : (i,k) \in A} x_{i k} - \sum_{j : (k,j) \in A, j \neq 0} x_{k j} &  & = 1                    &  & \forall k \in N               \\
+    \label{MILP:output}
+         & \sum_{j : (i,j) \in A} y_{i j}                                            &  & = 1                    &  & \forall i \in N               \\
+    \label{MILP:input}
+         & \sum_{i : (i,j) \in A} y_{i j}                                            &  & = 1                    &  & \forall j \in N               \\
+    \label{MILP:activation}
+         & x_{i j}                                                                   &  & \leq (|N| - 1) y_{i j} &  & \forall (i,j) \in A, j \neq 0 \\
+         & x_{i j} \in \mathbb{R}                                                    &  &                        &  & \forall (i,j) \in A, j \neq 0 \\
+         & y_{i j} \in \{0, 1\}                                                      &  &                        &  & \forall (i,j) \in A
+\end{align}
+
+The idea behind this formulation consider the TSP as a network flow problem.
+
+There are two sets of variables. The real $x_{i j}$ variables indicate the amount of flow from node $i$ to node $j$, while the binary $y_{i j}$ variables indicate whether there is any flow between the noe $i$ and $j$.
+
+The formulation assumes there is a flow of amount $(|N|-1)$ coming out of the starting node $0$.
+Then it constraints each node to:
+\begin{itemize}
+    \item consume one unit of flow (\ref{MILP:consume});
+    \item forward the flow only to one node (\ref{MILP:output});
+    \item receive the flow only to one node (\ref{MILP:input}).
+\end{itemize}
+
+Finally, the constraint (\ref{MILP:activation}) ensures that if there is flow from node $i$ to node $j$, then $y_{i j} = 1$.
+Th fact that if there is no flow from node $i$ to node $j$, then $y_{i j} = 0$ is ensured by optimality.
+
+% This formulation corresponds to the one presented in \cite{gavish1978travelling}
 
 \subsection{Implementation}
 
