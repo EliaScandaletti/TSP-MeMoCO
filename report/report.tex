@@ -2,6 +2,11 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[
+    backend=biber,
+    sorting=ynt
+]{biblatex}
+\addbibresource{biblio.bib}
 
 \title{
     Project Report
@@ -79,7 +84,7 @@ Then it constraints each node to:
 Finally, the constraint (\ref{MILP:activation}) ensures that if there is flow from node $i$ to node $j$, then $y_{i j} = 1$.
 Th fact that if there is no flow from node $i$ to node $j$, then $y_{i j} = 0$ is ensured by optimality.
 
-% This formulation corresponds to the one presented in \cite{gavish1978travelling}
+This formulation corresponds to the one presented in \cite{gavish1978travelling}.
 
 \subsection{Implementation}
 
@@ -103,5 +108,6 @@ Th fact that if there is no flow from node $i$ to node $j$, then $y_{i j} = 0$ i
 
 \subsection{Results Comparison}
 
+\printbibliography
 
 \end{document}
