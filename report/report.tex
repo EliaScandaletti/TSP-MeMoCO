@@ -71,7 +71,8 @@ The exact method uses the following mathematical formulation of the problem.
 
 The idea behind this formulation consider the TSP as a network flow problem.
 
-There are two sets of variables. The real $x_{i j}$ variables indicate the amount of flow from node $i$ to node $j$, while the binary $y_{i j}$ variables indicate whether there is any flow between the noe $i$ and $j$.
+There are two sets of variables.
+The real $x_{i j}$ variables indicate the amount of flow from node $i$ to node $j$, while the binary $y_{i j}$ variables indicate whether there is any flow between the noe $i$ and $j$.
 
 The formulation assumes there is a flow of amount $(|N|-1)$ coming out of the starting node $0$.
 Then it constraints each node to:
@@ -89,8 +90,24 @@ This formulation corresponds to the one presented in \cite{gavish1978travelling}
 \section{Heuristic Method}
 
 \subsection{Algorithm Design}
-\paragraph{Opt2 moves}
-\paragraph{Opt2.5 moves}
+The chosen algorithm uses the tabu search meta-heuristic.
+Each component of the algorithm will be discussed in the following paragraphs.
+
+\paragraph{Initial Solution}
+To generate the initial solution the farthest node insertion heuristic has been used.
+This heuristic has been implemented in its deterministic flavour using the two farthest nodes as a starting loop.
+
+\paragraph{Solution Representation}
+The solution is represented as a sequence of nodes in order to easily apply opt2 and opt2.5 moves.
+In the sequence each node appears exactly once.
+
+In the solution, the traveler starts the tour from the first node and visits each node in the order they appear in the vector.
+After visiting the last node, the traveler goes back to the first one.
+
+\paragraph{Opt2 Moves}
+\paragraph{Opt2.5 Moves}
+\cite{johnson1997traveling}
+\paragraph{Move Evaluation}
 \paragraph{Tabu List} (store opt2 moves)
 \paragraph{Aspiration Criteria}
 \paragraph{Non-improving iterations}
