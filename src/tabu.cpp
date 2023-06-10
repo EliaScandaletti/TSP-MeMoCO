@@ -1,7 +1,5 @@
-#include <ctime>
-#include <stdexcept>
-#include <string>
-#include <sys/time.h>
+#include <fstream>
+#include <iostream>
 
 #include "instance/matrix.h"
 #include "solution/path.h"
@@ -17,6 +15,7 @@ int status;
 char errmsg[255];
 
 int main(int argc, char const *argv[]) {
+  std::ofstream *debug = nullptr;
   try {
     if (argc < 5)
       throw std::runtime_error(
@@ -27,6 +26,9 @@ int main(int argc, char const *argv[]) {
     int tabu_length = std::stoi(argv[2]);
     int max_non_imp_iter = std::stoi(argv[3]);
     int max_iter = std::stoi(argv[4]);
+    if (argc > 5) {
+      debug = new std::ofstream(argv[5]);
+    }
 
     // CPU time (t2 - t1)
     clock_t t1, t2;
@@ -44,7 +46,7 @@ int main(int argc, char const *argv[]) {
       t1 = clock();
       /// run the neighborhood search
       int iter = tabu_solver.solve(instance, solution, tabu_length,
-                                   max_non_imp_iter, max_iter);
+                                   max_non_imp_iter, max_iter, debug);
       t2 = clock();
       cum_sol += solution.evaluate(instance);
       cum_iter += iter;
@@ -56,6 +58,10 @@ int main(int argc, char const *argv[]) {
 
   } catch (std::exception &e) {
     std::cout << ">>>EXCEPTION: " << e.what() << std::endl;
+  }
+  if (debug) {
+    debug->close();
+    delete debug;
   }
   return 0;
 }

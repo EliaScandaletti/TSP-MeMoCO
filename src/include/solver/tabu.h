@@ -1,6 +1,7 @@
 #ifndef TSPSOLVER_H
 #define TSPSOLVER_H
 
+#include <ostream>
 #include <vector>
 
 #include "solution/path.h"
@@ -12,14 +13,14 @@ namespace TSP {
 namespace solver {
 
 /**
- * Class that solves a TSP problem by neighbourdood search and 2-opt moves
+ * Class that solves a TSP problem by neighborhood search and 2-opt moves
  */
 class Tabu {
 public:
   Tabu() = default;
 
   int solve(const Instance &tsp, Path &bestSol, std::size_t tabu_size,
-            int max_non_dec_iter, int max_iter);
+            int max_non_dec_iter, int max_iter, std::ostream *debug = nullptr);
 };
 
 } // namespace solver

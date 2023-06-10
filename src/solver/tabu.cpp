@@ -132,13 +132,18 @@ bool next_opt2_5(const Instance &tsp, const Path &currSol, Path::opt2_5 &m,
 }
 
 int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
-                int max_non_imp_iter, int max_iter) {
+                int max_non_imp_iter, int max_iter, std::ostream *debug) {
   int iter = 0;
   int non_imp_iter = 0;
 
   Path curr_sol = sol;
   double best_val, curr_val;
   best_val = curr_val = curr_sol.evaluate(tsp);
+
+  if (debug) {
+    *debug << iter << ", " << best_val << ", " << curr_val << ", "
+           << non_imp_iter << std::endl;
+  }
 
   std::deque<Path::opt2_5> tabu_list;
 
@@ -166,6 +171,11 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
         best_val = curr_val;
         sol = curr_sol;
         non_imp_iter = 0;
+      }
+
+      if (debug) {
+        *debug << iter << ", " << best_val << ", " << curr_val << ", "
+               << non_imp_iter << std::endl;
       }
 
       // find next move
