@@ -162,7 +162,7 @@ int Tabu::solve(const Instance &tsp, Path &sol, size_t tabu_size,
         tabu_list.pop_front();
 
       // check if curr_sol is the best so far
-      if (curr_val < best_val) {
+      if (curr_val < best_val - 1e-6) {
         best_val = curr_val;
         sol = curr_sol;
         non_imp_iter = 0;
