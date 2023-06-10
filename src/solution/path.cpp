@@ -119,6 +119,8 @@ bool TSP::solution::Path::opt2_5::operator==(const opt2_5 &other) const {
     return _opt2 == other._opt2;
   case opt2_5::REP:
     return _rep == other._rep;
+  default:
+    return false;
   }
 }
 
@@ -129,6 +131,8 @@ double TSP::solution::Path::evaluate_opt2_5(const Instance &tsp,
     return evaluate_opt2(tsp, m._opt2);
   case opt2_5::REP:
     return evaluate_reposition(tsp, m._rep);
+  default:
+    return false;
   }
 }
 
