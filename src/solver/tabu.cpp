@@ -10,7 +10,7 @@ bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
                bool &improving, double &best_inc,
                const std::deque<Path::opt2_5> &tabu, double acc_inc) {
   best_inc = -1e-6;
-  double worst_inc = 0;
+  double worst_inc = 1e-6;
   Path::opt2 worst;
   bool found = false;
   improving = false;
@@ -25,14 +25,15 @@ bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
                      std::find(tabu.begin(), tabu.end(), _mov) != tabu.end();
 
       if (!is_tabu) {
-        found = true;
         if (inc < best_inc) {
           best_inc = inc;
           m = mov;
+          found = true;
           improving = true;
         } else if (!improving && inc > worst_inc) {
           worst_inc = inc;
           worst = mov;
+          found = true;
         }
       }
     }
@@ -40,6 +41,7 @@ bool next_opt2(const Instance &tsp, const Path &currSol, Path::opt2 &m,
 
   if (!improving) {
     m = worst;
+    best_inc = worst_inc;
   }
 
   return found;
@@ -49,7 +51,7 @@ bool next_reposition(const Instance &tsp, const Path &currSol,
                      Path::reposition &m, bool &improving, double &best_inc,
                      const std::deque<Path::opt2_5> &tabu, double acc_inc) {
   best_inc = -1e-6;
-  double worst_inc = 0;
+  double worst_inc = 1e-6;
   Path::reposition worst;
   bool found = false;
   improving = false;
@@ -66,14 +68,15 @@ bool next_reposition(const Instance &tsp, const Path &currSol,
                      std::find(tabu.begin(), tabu.end(), _mov) != tabu.end();
 
       if (!is_tabu) {
-        found = true;
         if (inc < best_inc) {
           best_inc = inc;
           m = mov;
+          found = true;
           improving = true;
         } else if (!improving && inc > worst_inc) {
           worst_inc = inc;
           worst = mov;
+          found = true;
         }
       }
     }
@@ -81,6 +84,7 @@ bool next_reposition(const Instance &tsp, const Path &currSol,
 
   if (!improving) {
     m = worst;
+    best_inc = worst_inc;
   }
 
   return found;
