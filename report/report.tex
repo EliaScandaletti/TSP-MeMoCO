@@ -97,21 +97,74 @@ Each component of the algorithm will be discussed in the following paragraphs.
 To generate the initial solution the farthest node insertion heuristic has been used.
 This heuristic has been implemented in its deterministic flavour using the two farthest nodes as a starting loop.
 
+\paragraph{2.5-opt Moves}
+This type of move, described in \cite{johnson1997traveling}, is used to generate the neighborhood and consists in either a 2-opt move or a reposition move.
+A 2-opt move consists in inverting a sub-tour, while a reposition move consists in moving a single node to a different position in the tour.
+At each iteration there are $O(n^2)$ possible 2.5-opt moves.
+
+\paragraph{Move Evaluation}
+This type of move allows for incremental evaluation in constant time.
+In particular, for a 2-opt move that invert the sub-tour $i$-$j$, we have
+$$ \Delta C_{\textrm{2-opt}} = c_{p(i), j} + c_{i, s(j)} - c_{p(i), i} - c_{j, s(j)} $$
+Instead, for a reposition move that move the node $i$ just after the node $j$, assuming $j \neq i$ and $j$ is not immediately preceding $i$, we have
+$$ \Delta C_{\textrm{rep}} = c_{p(i), s(i)} - c_{p(i), i} - c_{i, s(i)} - c_{j, s(j)} + c_{j, i} + c_{i, s(j)} $$
+
+Where $p(i)$ is the node preceding $i$ in the current tour and $s(i)$ is the node following $i$ in the current tour.
+
 \paragraph{Solution Representation}
-The solution is represented as a sequence of nodes in order to easily apply opt2 and opt2.5 moves.
+The solution is represented as a sequence of nodes in order to easily apply 2.5-opt moves.
 In the sequence each node appears exactly once.
 
 In the solution, the traveler starts the tour from the first node and visits each node in the order they appear in the vector.
 After visiting the last node, the traveler goes back to the first one.
 
-\paragraph{Opt2 Moves}
-\paragraph{Opt2.5 Moves}
-\cite{johnson1997traveling}
-\paragraph{Move Evaluation}
-\paragraph{Tabu List} (store opt2 moves)
-\paragraph{Aspiration Criteria}
-\paragraph{Non-improving iterations}
+\paragraph{Tabu List}
+The tabu list used in the algorithm is fixed-size and keeps in memory the last 2.5-opt moves performed.
+While choosing the next 2.5-opt move to perform, the algorithm excludes the ones in the list.
+
+In some cases, though, the tabu list can be by-passed.
+This happens when a move which is tabu leads to a solution which is the best found so far.
+
+\paragraph{Exploring Strategy}
+The algorithms performs a tabu search using the steepest descent criteria on the 2.5-opt neighborhood.
+If no improving moves can be found, then the algorithm picks the worst one.
+In this way, the algorithm can escape the local minima by exploiting diversification of the explored solutions.
+
 \paragraph{Stopping Criteria}
+The algorithms halts when one of the following conditions is met:
+\begin{itemize}
+    \item the maximum number of non increasing iterations is reached;
+    \item the maximum number of iterations is reached.
+\end{itemize}
+
+\paragraph{Configuration of the Algorithm}
+The following parameters of the algorithm that can be configured:
+\begin{itemize}
+    \item \textbf{Size of tabu list}
+          This is the maximum number of moves stored in the tabu list.
+          If this number is too high:
+          \begin{itemize}
+              \item it takes up more memory;
+              \item it may exclude too many moves, including the ones that may lead to an improvement.
+          \end{itemize}
+          On the other hand, if it is too low, the risk of moving around a local minimum without escaping from it increases.
+
+    \item \textbf{Maximum number of iterations}
+          This is the maximum number of moves that the algorithm can perform.
+          If it is too low, the algorithm may stop before reaching any good solution.
+          If it is too high, the algorithm may run for a long time while yielding small or no improvement at all.
+          The risk of a high maximum number of iterations may be mitigated by reducing the maximum number of non-improving iterations.
+
+    \item \textbf{Maximum number of non-improving iterations}
+          This parameter determines how many non-improving moves, both 2-opt and 2.5-opt, can be performed.
+          If it is too high, the risk of moving around the same local minimum without finding a better solution for a long time is high.
+          On the other hand, if it is too low, the algorithm could miss the opportunity to escape from a local minimum.
+
+    \item \textbf{Maximum value for non-improving iterations}
+          This parameter determines whether a non-improving 2-opt move should be considered.
+          It is expressed as
+
+\end{itemize}
 
 \section{Implementation}
 
@@ -127,6 +180,7 @@ After visiting the last node, the traveler goes back to the first one.
 
 \subsection{Results Comparison}
 
+\nocite{*}
 \printbibliography
 
 \end{document}
