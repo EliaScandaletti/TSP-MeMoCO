@@ -144,25 +144,28 @@ The following parameters of the algorithm that can be configured:
           If this number is too high:
           \begin{itemize}
               \item it takes up more memory;
-              \item it may exclude too many moves, including the ones that may lead to an improvement.
+              \item it may exclude too many moves, including the ones that may lead to a (later) improvement.
           \end{itemize}
           On the other hand, if it is too low, the risk of moving around a local minimum without escaping from it increases.
+
+          Furthermore, the tabu list helps not to fall again in the previous local minimum after the diversification steps. Therefore, a short tabu list is less effective in diversification and may lead to an overall worse solution.
+
+    \item \textbf{Maximum number of non-improving tabu iterations}
+          This parameter determines how many non-improving 2.5-opt moves can be done before performing a diversification step.
+          If it is too high, the risk of moving around the same local minimum without finding a better solution for a long time is high.
+          On the other hand, if it is too low, the algorithm could miss the opportunity to escape from a local minimum without resorting to differentiation.
+
+    \item \textbf{Maximum number of non-improving iterations}
+          This parameter determines how many non-improving moves, including both 2.5-opt moves and diversification steps, can be performed before the algorithm halts.
+          The higher this value is, the higher the risk of performing useless iterations is, where useless means that they do not contribute to the overall solution.
+          On the other hand, if it is too low, the algorithm could miss the opportunity of finding better solutions.
 
     \item \textbf{Maximum number of iterations}
           This is the maximum number of moves that the algorithm can perform.
           If it is too low, the algorithm may stop before reaching any good solution.
           If it is too high, the algorithm may run for a long time while yielding small or no improvement at all.
+
           The risk of a high maximum number of iterations may be mitigated by reducing the maximum number of non-improving iterations.
-
-    \item \textbf{Maximum number of non-improving iterations}
-          This parameter determines how many non-improving moves, both 2-opt and 2.5-opt, can be performed.
-          If it is too high, the risk of moving around the same local minimum without finding a better solution for a long time is high.
-          On the other hand, if it is too low, the algorithm could miss the opportunity to escape from a local minimum.
-
-    \item \textbf{Maximum value for non-improving iterations}
-          This parameter determines whether a non-improving 2-opt move should be considered.
-          It is expressed as
-
 \end{itemize}
 
 \section{Implementation}
