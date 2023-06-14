@@ -127,8 +127,7 @@ This happens when a move which is tabu leads to a solution which is the best fou
 
 \paragraph{Exploring Strategy}
 The algorithms performs a tabu search using the steepest descent criteria on the 2.5-opt neighborhood.
-If no improving moves can be found, then the algorithm picks the worst one.
-In this way, the algorithm can escape the local minima by exploiting diversification of the explored solutions.
+If the tabu search cannot find an improving solution for a given number of iterations, then the algorithm moves to the worst neighbor of the current solution and resume the tabu search from there.
 
 \paragraph{Stopping Criteria}
 The algorithms halts when one of the following conditions is met:
