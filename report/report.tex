@@ -170,6 +170,9 @@ The following parameters of the algorithm that can be configured:
 
 \section{Implementation}
 
+In this section, we first describe the classes used in both the methods, looking at their public interfaces.
+Then we focus on the classes representing the solvers used in each method, diving into the details of the algorithms.
+
 \subsection{Common Interfaces and Classes}
 The following classes are abstract and represent common interfaces used in both the methods.
 
@@ -240,7 +243,44 @@ Additionally, the \texttt{opt2\_5} class implements the overloaded static method
 The \texttt{evaluate\_move} and \texttt{apply\_move} are overloaded for all the three types of moves.
 
 \subsection{MILP Formulation}
+The exact method required one additional class \texttt{Flow}.
+
+The class has the following fields:
+\begin{itemize}
+    \item \texttt{status}: is the CPLEX solver status;
+    \item \texttt{env}: the CPLEX environment;
+    \item \texttt{prob}: the CPLEX problem;
+    \item \texttt{x\_idx}: a map from each arc to the column of the corresponding $x$ variable, such that $x_{i j}$ is stored in the column \texttt{x\_idx[i][j]} of \texttt{prob};
+    \item \texttt{y\_idx}: the same as \texttt{x\_idx} except that it refers to the $y$ variables;
+    \item \texttt{cost}: matrix that stores the cost of each edge, such that \texttt{cost[i][j]} corresponds to $c_{i j}$.
+\end{itemize}
+
+It has only one constructor, \texttt{Flow(tsp)}, which takes in input an instance and setup the fields described above.
+This is done in three steps: firstly \texttt{cost}, \texttt{env} and \texttt{prob} are initialized, then the columns are generated one by one, lastly the rows are generated one by one.
+At the end of the second step also \texttt{x\_idx} and \texttt{y\_idx} are setup.
+
+After the problem is setup, it can be solved.
+This is done by invoking the method \texttt{solve()} which firstly solve the problem using the CPLEX solver, then builds the corresponding \texttt{Path} by looking at the values of the $y$ variables.
+
+The last method of the \texttt{Flow} class is \texttt{evaluate()}.
+This methods return the value of the objective function, therefore it must be called after \texttt{solve()}.
+
 \subsection{Tabu Search}
+This method required two classes to be implemented.
+The first one is the \texttt{FarthestInsertion} which implements a single method that solve the problem using the farthest insertion heuristic.
+The second one is \texttt{Tabu}.
+
+The class \texttt{Tabu} implements only the method \texttt{solve} which takes several parameters that configure the algorithm.
+The parameters are:
+\begin{itemize}
+    \item \texttt{tsp}: the problem to be solved;
+    \item \texttt{best\_sol}: the best solution known so far;
+    \item \texttt{tabu\_size}: the size of tabu list;
+    \item \texttt{max\_non\_imp\_local}: the maximum number of non-improving tabu iterations;
+    \item \texttt{max\_non\_imp\_global}: the maximum number of non-improving iterations;
+    \item \texttt{max\_iter}: the maximum number of iterations;
+    \item \texttt{debug}: an optional output stream useful for debug, at every step the current state is output to this stream.
+\end{itemize}
 
 \section{Experimental Results}
 
