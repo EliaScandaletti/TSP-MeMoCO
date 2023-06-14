@@ -30,16 +30,16 @@ public:
     int to;
     bool operator==(const opt2 &other) const;
   };
-  double evaluate_opt2(const Instance &tsp, const opt2 &m) const;
-  void apply_opt2(const opt2 &m);
+  double evaluate_move(const Instance &tsp, const opt2 &m) const;
+  void apply_move(const opt2 &m);
 
   struct reposition {
     int node;
     int after;
     bool operator==(const reposition &other) const;
   };
-  double evaluate_reposition(const Instance &tsp, const reposition &m) const;
-  void apply_reposition(const reposition &m);
+  double evaluate_move(const Instance &tsp, const reposition &m) const;
+  void apply_move(const reposition &m);
 
   /**
    * Struct representing a 2.5-opt move
@@ -59,8 +59,8 @@ public:
     static opt2_5 from(const reposition &m);
     bool operator==(const opt2_5 &other) const;
   };
-  double evaluate_opt2_5(const Instance &tsp, const opt2_5 &m) const;
-  void apply_opt2_5(const opt2_5 &m);
+  double evaluate_move(const Instance &tsp, const opt2_5 &m) const;
+  void apply_move(const opt2_5 &m);
 
   /**
    * set a solution as a random sequence by random swaps
