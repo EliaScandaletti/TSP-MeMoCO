@@ -13,7 +13,7 @@ class Solution {
 public:
   virtual std::size_t length() const = 0;
 
-  virtual double evaluate(const Instance &sol) const = 0;
+  virtual double evaluate(const Instance &tsp) const = 0;
 };
 
 } // namespace TSP

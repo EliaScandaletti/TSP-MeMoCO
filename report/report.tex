@@ -171,6 +171,74 @@ The following parameters of the algorithm that can be configured:
 \section{Implementation}
 
 \subsection{Common Interfaces and Classes}
+The following classes are abstract and represent common interfaces used in both the methods.
+
+\paragraph{Instance}
+This class represents a TSP instance.
+
+It provides two virtual methods:
+\begin{itemize}
+    \item \texttt{n()}: returns the number of nodes in the instance;
+    \item \texttt{cost(i, j)}: returns the cost of the arc from vertex $i$ to vertex $j$.
+\end{itemize}
+
+\paragraph{Solution}
+This class represents a solution for a TSP problem.
+
+It provides two virtual methods:
+\begin{itemize}
+    \item \texttt{length()}: returns the number of nodes in the solution;
+    \item \texttt{evaluate(tsp)}: returns the cost of the solution when applied to the instance represented by \texttt{tsp}.
+\end{itemize}
+
+~\\
+The following two classes implement the previous interfaces:
+
+\paragraph{Matrix}
+This class implements the \texttt{Instance} interface.
+It stores the problem it represents as a matrix of edge costs.
+
+This class has one constructor:
+\begin{itemize}
+    \item \texttt{Matrix(filename)}: reads the cost matrix from the file \texttt{filename}.
+\end{itemize}
+
+It adds to the interface the following method:
+\begin{itemize}
+    \item \texttt{read(filename)}: reads the cost matrix from the file \texttt{filename}.
+\end{itemize}
+
+\paragraph{Path}
+This class implements the \texttt{Solution} interface.
+It stores the problem it represents as a list of nodes, in the same order as they are visited by the traveler.
+
+This class has three constructors:
+\begin{itemize}
+    \item \texttt{Path(tsp)}: constructs a standard solution which visits the node of the \texttt{tsp} instance using the order of their label;
+    \item \texttt{Path(sol)}: default copy constructor;
+    \item \texttt{Path(seq)}: construct the solution from the vector \texttt{seq}.
+\end{itemize}
+
+Within \texttt{Path}, three nested classes are declared:
+\begin{itemize}
+    \item \texttt{opt2}: represents a 2-opt move;
+    \item \texttt{reposition}: represents a reposition move;
+    \item \texttt{opt2\_5}: represents a 2.5-opt move.
+\end{itemize}
+
+Each of these three classes implement the equivalence operator.
+Additionally, the \texttt{opt2\_5} class implements the overloaded static method \texttt{from} that converts \texttt{opt2} and \texttt{reposition} moves in \texttt{opt2\_5} moves.
+
+\texttt{Path} also implements the following methods:
+\begin{itemize}
+    \item \texttt{get\_nth(n)}: returns the node in the $n$-th position of the tour;
+    \item \texttt{evaluate\_move(tsp, m)}: incrementally evaluate the effect of applying move \texttt{m} on itself, when considering the instance \texttt{tsp};
+    \item \texttt{apply\_move(m)}: apply move \texttt{m} on itself;
+    \item \texttt{randomize()}: static method that returns a random \texttt{Path}.
+\end{itemize}
+
+The \texttt{evaluate\_move} and \texttt{apply\_move} are overloaded for all the three types of moves.
+
 \subsection{MILP Formulation}
 \subsection{Tabu Search}
 

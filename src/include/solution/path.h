@@ -14,7 +14,7 @@ class Path : public Solution {
 
 public:
   Path(const Instance &tsp);
-  Path(const Path &tspSol) = default;
+  Path(const Path &sol) = default;
   Path(const std::vector<int> &seq);
 
   std::size_t length() const override;
