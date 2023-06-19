@@ -27,6 +27,9 @@ def generate(n, grid_size):
             grid[x2][y2] = True
             points.append((x2, y2))
             c += 1
+    random.shuffle(points)
+    while n < len(points):
+        points.pop()
     # print("\n".join(["".join(["#" if e else "_" for e in r]) for r in grid]))
     return points
 
@@ -44,6 +47,7 @@ def store(file, points, n):
     return
 
 if __name__ == "__main__":
-    for n in range(10, 101, 5):
-        grid = generate(n, int(n/2))
-        store("data/tsp"+str(n)+".dat", grid, int(n/2))
+    for c in range(10):
+        for n in range(60, 251, 10):
+            grid = generate(n, int(n/2))
+            store("data/tsp"+str(n)+"_"+chr(65+c)+".dat", grid, int(n/2))
