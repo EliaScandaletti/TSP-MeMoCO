@@ -14,7 +14,7 @@ run() {
         for i in {20..250..15}; do
             for g in $(seq $((2*i)) 50 $((5*i))); do
                 ((m=10*g))
-                ./src/tabu $d $t $i $g $m >> $to &
+                ./src/tabu $d $t $i $g $m >> $to
             done
         done
     done
