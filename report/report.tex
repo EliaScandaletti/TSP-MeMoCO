@@ -52,6 +52,7 @@ A further assumption is that the drill can move at constant speed in any directi
 We therefore assume that the time needed to move the drill from a hole to the next one is proportional to the linear distance between the two.
 
 \section{Exact Method}
+\label{sec:exact}
 
 \subsection{MILP Formulation}
 The exact method uses the following mathematical formulation of the problem.
@@ -88,6 +89,7 @@ Th fact that if there is no flow from node $i$ to node $j$, then $y_{i j} = 0$ i
 This formulation corresponds to the one presented in \cite{gavish1978travelling}.
 
 \section{Heuristic Method}
+\label{sec:heuristic}
 
 \subsection{Algorithm Design}
 The chosen algorithm uses the tabu search meta-heuristic.
@@ -167,6 +169,36 @@ The following parameters of the algorithm that can be configured:
 
           The risk of a high maximum number of iterations may be mitigated by reducing the maximum number of non-improving iterations.
 \end{itemize}
+
+\section{Compilation and Execution}
+
+\subsection{Compilation}
+To compile the programs, it is sufficient to execute the command \texttt{make} while in the \texttt{src/} directory.
+The compilation will result in two executable files in the same directory: \texttt{exact} and \texttt{tabu}.
+
+\subsection{Execution}
+The \texttt{exact} executable takes one argument which is the relative path of the input file.
+The program apply the exact method described in Section \ref{sec:exact} to the input.
+
+The \texttt{tabu} executable takes five arguments which are:
+\begin{itemize}
+    \item relative path of the input file;
+    \item the size of the tabu list;
+    \item the maximum number of non-improving tabu iterations;
+    \item the maximum number of non-improving iterations;
+    \item the maximum number of iterations.
+\end{itemize}
+The program apply the heuristic method described in Section \ref{sec:heuristic} to the input file, using the parameters specified in the arguments.
+
+\subsection{Input format}
+The input files are plain text files which contains an integer number and a matrix of floating point numbers.
+
+The first number is interpreted as an integer and represent the size of the problem. Let's call it $n$.
+The following $n^2$ numbers are interpreted as floating point numbers and represent the cost matrix of the problem.
+
+
+Usually, for ease of reading, the first number is on its own line, while the matrix is written on $n$ lines, each containing $n$ numbers.
+This is not enforced, though, since spaces, tabs and new lines are ignored.
 
 \section{Implementation}
 
