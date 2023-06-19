@@ -38,24 +38,20 @@ int main(int argc, char const *argv[]) {
     Tabu tabu_solver;
     FarthestInsertion far_ins_solver;
 
-    double cum_sol = 0;
-    double cum_iter = 0;
-    double cum_time = 0;
-    for (int j = 0; j < 1; j++) {
-      /// initial solution
-      Path solution = far_ins_solver.solve(instance);
-      t1 = clock();
-      /// run the neighborhood search
-      int iter =
-          tabu_solver.solve(instance, solution, tabu_length, max_non_imp_tabu,
-                            max_non_imp_global, max_iter, debug);
-      t2 = clock();
-      cum_sol += solution.evaluate(instance);
-      cum_iter += iter;
-      cum_time += (double)(t2 - t1) / CLOCKS_PER_SEC;
-    }
+    /// initial solution
+    Path solution = far_ins_solver.solve(instance);
+    t1 = clock();
+    /// run the neighborhood search
+    int iter =
+        tabu_solver.solve(instance, solution, tabu_length, max_non_imp_tabu,
+                          max_non_imp_global, max_iter, debug);
+    t2 = clock();
+    double sol = solution.evaluate(instance);
+    double time = (double)(t2 - t1) / CLOCKS_PER_SEC;
+
     std::cout << argv[1] << "\t" << instance.n() << "\t" << tabu_length << "\t"
-              << cum_sol / 1 << "\t" << cum_iter / 1 << "\t" << cum_time / 1
+              << max_non_imp_tabu << "\t" << max_non_imp_global << "\t"
+              << max_iter << "\t" << sol << "\t" << iter << "\t" << time
               << std::endl;
 
   } catch (std::exception &e) {
