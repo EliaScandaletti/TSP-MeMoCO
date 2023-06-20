@@ -3,4 +3,5 @@
 main
 exact
 tabu
+__pycache__/*
 !results/*
