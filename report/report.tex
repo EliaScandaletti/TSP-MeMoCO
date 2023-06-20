@@ -7,6 +7,10 @@
     sorting=ynt
 ]{biblatex}
 \addbibresource{biblio.bib}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\usepgfplotslibrary{external}
+\tikzexternalize
 
 \title{
     Project Report
@@ -316,11 +320,118 @@ The parameters are:
 
 \section{Experimental Results}
 
-\subsection{Parameters Tuning}
-\paragraph{Tabu List Length} vs size X
-\paragraph{Max Non Imp Iter}
+\subsection{Benchmark}
+The benchmark for the experiments is composed of 200 problems.
+These problems have a size ranging from 60 to 250, every 10.
+For each dimension, there are 10 instances.
 
-\subsection{Results Comparison}
+All the instances can be found in the \texttt{data/} folder.
+Each one is saved in a file named \texttt{tsp$n$\_$X$}, where $n$ is the size of the problem and $X$ is a letter between A and J (included).
+
+\subsection{Configurations}
+The tabu algorithm has been executed on each instance using 280 different configurations.
+Let $n$ be the size of the instance, $t$ the size of the tabu list, $i$ the maximum number of non increasing tabu iterations, $g$ the maximum number of non increasing iterations and $m$ the maximum number of iterations.
+Then
+\begin{align*}
+    t & = \frac{n}{10} + \frac{n}{10} k, & k = 0 \dots 4 \\
+    i & = 20 + 30 k,                     & k = 0 \dots 7 \\
+    g & = 2 i + \frac{i}{2} k,           & k = 0 \dots 6 \\
+    m & = 10 g
+\end{align*}
+
+\subsection{Results analysis}
+The results for each instance have been stored in the file \texttt{results/tabu/$X$.res}, where $X$ is the name of the instance.
+Within each file, each line is the output of a run of the tabu algorithm.
+
+The analysis of the results is focused on two aspects:
+\begin{itemize}
+    \item the best size for the tabu list;
+    \item how effective is the diversification strategy.
+\end{itemize}
+
+The code used to perform the analysis in this section can be found in the file \texttt{analysis.ipynb}.
+
+\paragraph{Size of Tabu List}
+In order to find out the best size of the tabu list for each size of the problem, the following steps were taken:
+\begin{enumerate}
+    \item for each instance, for each tabu size, list the values of all the solutions found;
+    \item for each instance, for each tabu size, calculate the average of the values found;
+    \item for each instance, find which tabu size(s) lead to the best average;
+    \item for each instance size, determine how many times the best average value has been found using a given tabu size.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                title=Size of Tabu List Analysis,
+                xlabel=Size of instance,
+                ylabel=Size of tabu list,
+                colorbar
+            ]
+            \addplot+[
+                only marks,
+                scatter,
+                point meta=explicit,
+                mark=halfcircle*,
+                mark size=2.9pt]
+            table[meta index=2]
+                {data/tabu_size.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{
+        This graph compares the size of instances with the size of the tabu list used.
+        The color of each point determines in how many instances that tabu size lead in average to the best solution for the problem.
+    }
+    \label{fig:tabu}
+\end{figure}
+
+In Figure \ref{fig:tabu}, it's clear that most of the times the best solutions were found with higher sizes of tabu list.
+This could mean two things: either the bigger the tabu list, the better the solution or the experiments should be run with greater values for the tabu list.
+Since the first hypothesis is clearly absurd, then there is space for future experiments.
+
+\paragraph{Effectiveness of the Diversification Strategy}
+In this paragraph, we will use ``nit'' as an abbreviation of ``maximum non increasing tabu iterations'' and ``nig'' as an abbreviation of ``maximum non increasing iterations'' in order to shortly refer to the two parameters.
+
+In order to find out whether and when the diversification strategy is useful, the following steps were taken:
+\begin{enumerate}
+    \item for each instance, for each nit, for each nig, find the best value of the result;
+    \item for each instance, for each nit, list the nigs that lead to an improvement when compared to smaller nigs and the respective percentile improvement;
+    \item for each instance, consider the ratio of the improving nigs with the used nit and for each ratio compute the average improvement.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                title=Diversification Strategy Analysis,
+                xlabel=Size of instance,
+                ylabel=Ratio nig/nit,
+                colorbar
+            ]
+            \addplot+[
+                only marks,
+                scatter,
+                point meta=explicit,
+                mark=halfcircle*,
+                mark size=2.9pt]
+            table[meta index=2]
+                {data/nig_imp.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{
+        This graph compares the size of instances with the ratio between non improving tabu iterations and non improving iterations.
+        The color of each point determines the average improvement obtained using that ratio w.r.t. the immediately smaller one.
+    }
+    \label{fig:div}
+\end{figure}
+
+In Figure \ref{fig:div}, we can see that in average increasing the nig almost always leads to an improvement in the solution.
+On the other hand, the higher the nig, the longer the execution time, for obvious reasons.
+
+Note that for most problem sizes, the best improvement is when the ratio is $3.5$, while for higher or lower values -except for a few lucky or unlucky exceptions- the improvement isn't higher than $1\%$.
+
+Further experiments should be performed in order to find an upper bound to the nig/nit ratio after which no improvement are achieved.
 
 \nocite{*}
 \printbibliography
