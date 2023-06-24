@@ -10,8 +10,8 @@ run() {
     n=$2
     to=${d/data/$res_dir}
     to=${to/dat/res}
-    echo "" > $to
-    for t in $(seq $((n/10)) $((n/10)) $((n/2))); do
+    # echo "" > $to
+    for t in $(seq $((6*n/10)) $((n/10)) $((n))); do
         for i in {20..250..30}; do
             for g in $(seq $((2*i)) $((i/2)) $((5*i))); do
                 ((m=10*g))
@@ -26,9 +26,11 @@ i=0
 (
 for d in data/*.dat; do
    ((i=i%N)); ((i++==0)) && wait
-    echo "tabu $d"
     n=${d#*tsp}
     n=${n%_*}
-    run $d $n &
+    (
+        run $d $n;
+        echo "tabu $d"
+    )&
 done
 )
