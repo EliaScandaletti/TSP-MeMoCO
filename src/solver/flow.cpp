@@ -1,16 +1,19 @@
 #include "solver/flow.h"
 
 #include <iostream>
+#include <limits>
+
 #define STRINGIZE_HELPER(something) #something
 
 using TSP::solution::Path;
 using TSP::solver::Flow;
 
-bool error(int status) {
+bool error(int status, const char *file, int line, bool print = false) {
   if (status) {
     char errmsg[CPXMESSAGEBUFSIZE];
     CPXgeterrorstring(NULL, status, errmsg);
-    std::cerr << std::string(__FILE__) << ":" << __LINE__ << " : " << errmsg;
+    if (print)
+      std::cerr << std::string(file) << ":" << line << " : " << errmsg;
     return true;
   }
   return false;
@@ -22,10 +25,10 @@ Flow::Flow(const Instance &tsp)
     : _n(tsp.n()), x_idx(_n, std::vector<int>(_n, -1)), y_idx(x_idx),
       cost(_n, std::vector<double>(_n, 0)) {
   env = CPXopenCPLEX(&status);
-  if (error(status))
+  if (error(status, __FILE__, __LINE__))
     return;
   prob = CPXcreateprob(env, &status, "TSP");
-  if (error(status))
+  if (error(status, __FILE__, __LINE__))
     return;
 
   int idx = 0;
@@ -46,7 +49,7 @@ Flow::Flow(const Instance &tsp)
         double coeff[] = {cost[i][j]};
         status = CPXnewcols(env, prob, 1, coeff, &lb, &ub, &type, names);
         y_idx[i][j] = idx++;
-        if (error(status))
+        if (error(status, __FILE__, __LINE__))
           return;
       }
     }
@@ -64,7 +67,7 @@ Flow::Flow(const Instance &tsp)
         sprintf(name, "x_%ld_%ld", i, j);
         status = CPXnewcols(env, prob, 1, nullptr, &lb, &ub, &type, names);
         x_idx[i][j] = idx++;
-        if (error(status))
+        if (error(status, __FILE__, __LINE__))
           return;
       }
     }
@@ -77,7 +80,7 @@ Flow::Flow(const Instance &tsp)
 
     status = CPXaddrows(env, prob, 0, 1, _n - 1, rhs, "E", rmatbeg,
                         &x_idx[0][1], coeff.data(), nullptr, nullptr);
-    if (error(status))
+    if (error(status, __FILE__, __LINE__))
       return;
   }
 
@@ -105,7 +108,7 @@ Flow::Flow(const Instance &tsp)
 
       status = CPXaddrows(env, prob, 0, 1, coeff.size(), rhs, "E", rmatbeg,
                           rmatind.data(), coeff.data(), nullptr, nullptr);
-      if (error(status))
+      if (error(status, __FILE__, __LINE__))
         return;
     }
   }
@@ -126,7 +129,7 @@ Flow::Flow(const Instance &tsp)
 
       status = CPXaddrows(env, prob, 0, 1, coeff.size(), rhs, "E", rmatbeg,
                           rmatind.data(), coeff.data(), nullptr, nullptr);
-      if (error(status))
+      if (error(status, __FILE__, __LINE__))
         return;
     }
   }
@@ -147,7 +150,7 @@ Flow::Flow(const Instance &tsp)
 
       status = CPXaddrows(env, prob, 0, 1, coeff.size(), rhs, "E", rmatbeg,
                           rmatind.data(), coeff.data(), nullptr, nullptr);
-      if (error(status))
+      if (error(status, __FILE__, __LINE__))
         return;
     }
   }
@@ -166,7 +169,7 @@ Flow::Flow(const Instance &tsp)
 
         status = CPXaddrows(env, prob, 0, 1, 2, rhs, "L", rmatbeg, rmatind,
                             coeff, nullptr, nullptr);
-        if (error(status))
+        if (error(status, __FILE__, __LINE__))
           return;
       }
     }
@@ -179,14 +182,17 @@ Flow::~Flow() {
   CPXcloseCPLEX(&env);
 }
 
-TSP::solution::Path Flow::solve() {
+TSP::solution::Path Flow::solve(int timeout) {
+  CPXsetintparam(env, CPXPARAM_ClockType, 1);
+  CPXsetdblparam(env, CPXPARAM_TimeLimit, timeout);
+
   status = CPXmipopt(env, prob);
-  if (error(status))
+  if (error(status, __FILE__, __LINE__))
     return solution::Path(std::vector<int>());
 
   double sol[_n * (_n - 1)];
   status = CPXgetx(env, prob, sol, 0, _n * (_n - 1) - 1);
-  if (error(status))
+  if (error(status, __FILE__, __LINE__))
     return solution::Path(std::vector<int>());
 
   std::vector<int> seq;
@@ -208,7 +214,15 @@ TSP::solution::Path Flow::solve() {
 double Flow::evaluate() const {
   double eval;
   int status = CPXgetobjval(env, prob, &eval);
-  if (error(status))
-    return 0.0;
+  if (error(status, __FILE__, __LINE__))
+    return std::numeric_limits<double>::infinity();
   return eval;
+}
+
+double TSP::solver::Flow::lower_bound() const {
+  double lb;
+  int status = CPXgetbestobjval(env, prob, &lb);
+  if (error(status, __FILE__, __LINE__))
+    return 0.0;
+  return lb;
 }

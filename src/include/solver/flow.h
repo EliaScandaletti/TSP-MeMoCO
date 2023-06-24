@@ -1,4 +1,5 @@
 #include <ilcplex/cplex.h>
+#include <limits>
 #include <vector>
 
 #include "instance.h"
@@ -23,9 +24,10 @@ class Flow {
 public:
   Flow(const Instance &);
   ~Flow();
-  Path solve();
+  Path solve(int timeout = std::numeric_limits<int>::max());
 
   double evaluate() const;
+  double lower_bound() const;
 };
 
 } // namespace solver
