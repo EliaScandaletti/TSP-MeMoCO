@@ -7,7 +7,7 @@ mkdir -p $res_dir
 
 N=$(nproc)
 i=0
-(
+
 for d in data/*.dat; do
    ((i=i%N)); ((i++==0)) && wait
     to=${d/data/$res_dir}
@@ -17,4 +17,4 @@ for d in data/*.dat; do
     echo "./src/exact $d"
     )&
 done
-)
+wait

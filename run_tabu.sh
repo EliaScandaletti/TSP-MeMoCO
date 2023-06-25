@@ -23,7 +23,7 @@ run() {
 
 N=$(nproc)
 i=0
-(
+
 for d in data/*.dat; do
    ((i=i%N)); ((i++==0)) && wait
     n=${d#*tsp}
@@ -33,4 +33,4 @@ for d in data/*.dat; do
         echo "tabu $d"
     )&
 done
-)
+wait
