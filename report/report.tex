@@ -8,7 +8,7 @@
 ]{biblatex}
 \addbibresource{biblio.bib}
 \usepackage{pgfplots}
-\pgfplotsset{width=10cm,compat=1.9}
+\pgfplotsset{width=0.9\textwidth,compat=1.9}
 \usepgfplotslibrary{external}
 \tikzexternalize
 
@@ -25,6 +25,7 @@
 \maketitle
 
 \section{Introduction}
+\label{sec:intro}
 
 This project consists in the development and comparison of two methods to solve the Traveling Salesman Problem in a specific domain, namely the drilling of holes in electric panel boards.
 In particular, the problem consists in minimizing the time the drill needs to prepare each board.
@@ -325,28 +326,56 @@ The benchmark for the experiments is composed of 200 problems.
 These problems have a size ranging from 60 to 250, every 10.
 For each dimension, there are 10 instances.
 
+\paragraph{Instances Generation}
+The instances have been generated using a method based on the domain assumptions exposed in Section \ref{sec:intro}.
+To generate a problem of size $n$, the generation method follows these steps:
+\begin{enumerate}
+    \item Create a $n/2 \times n/2$ grid;
+    \item while the nodes are less than $n$:
+          \begin{enumerate}
+              \item choose four elements of the grid in a rectangular shape;
+              \item add the corresponding nodes to the instance;
+          \end{enumerate}
+    \item if there are more nodes than needed, remove random nodes until there is the right amount.
+\end{enumerate}
+The code used to generate the instances can be found in the file \texttt{generate.py}.
+
 All the instances can be found in the \texttt{data/} folder.
 Each one is saved in a file named \texttt{tsp$n$\_$X$}, where $n$ is the size of the problem and $X$ is a letter between A and J (included).
 
-\subsection{Configurations}
-The tabu algorithm has been executed on each instance using 280 different configurations.
+\subsection{Execution}
+\label{sec:exp:exe}
+
+\paragraph{Tabu Configurations}
+The tabu algorithm has been executed on each instance using 560 different configurations.
 Let $n$ be the size of the instance, $t$ the size of the tabu list, $i$ the maximum number of non increasing tabu iterations, $g$ the maximum number of non increasing iterations and $m$ the maximum number of iterations.
 Then
 \begin{align*}
-    t & = \frac{n}{10} + \frac{n}{10} k, & k = 0 \dots 4 \\
+    t & = \frac{n}{10} + \frac{n}{10} k, & k = 0 \dots 9 \\
     i & = 20 + 30 k,                     & k = 0 \dots 7 \\
     g & = 2 i + \frac{i}{2} k,           & k = 0 \dots 6 \\
     m & = 10 g
 \end{align*}
 
+\paragraph{Exact Method Configuration}
+The exact method has been executed once on each instance using a 10 minutes timeout.
+
+\paragraph{Results}
+For each instance $X$, the results have been stored in two files:
+\begin{itemize}
+    \item \texttt{results/exact/$X$.res}: contains the output of the execution of the exact method;
+    \item \texttt{results/tabu/$X$.res}: contains the outputs of the heuristic method, each line is the output obtained using a different configuration, as described in Section \ref{sec:exp:exe}.
+\end{itemize}
+
 \subsection{Results analysis}
+\label{sec:exp:res}
 The results for each instance have been stored in the file \texttt{results/tabu/$X$.res}, where $X$ is the name of the instance.
 Within each file, each line is the output of a run of the tabu algorithm.
 
 The analysis of the results is focused on two aspects:
 \begin{itemize}
-    \item the best size for the tabu list;
-    \item how effective is the diversification strategy.
+    \item finding the best configuration, given the size of the instance;
+    \item comparing the exact and the heuristic methods in terms of effectiveness and efficiency.
 \end{itemize}
 
 The code used to perform the analysis in this section can be found in the file \texttt{analysis.ipynb}.
@@ -388,7 +417,7 @@ In order to find out the best size of the tabu list for each size of the problem
 
 In Figure \ref{fig:tabu}, it's clear that most of the times the best solutions were found with higher sizes of tabu list.
 This could mean two things: either the bigger the tabu list, the better the solution or the experiments should be run with greater values for the tabu list.
-Since the first hypothesis is clearly absurd, then there is space for future experiments.
+Since the first hypothesis is clearly absurd, then using a tabu list with the same size of the problem is the best choice among the proposed configurations.
 
 \paragraph{Effectiveness of the Diversification Strategy}
 In this paragraph, we will use ``nit'' as an abbreviation of ``maximum non increasing tabu iterations'' and ``nig'' as an abbreviation of ``maximum non increasing iterations'' in order to shortly refer to the two parameters.
@@ -399,6 +428,8 @@ In order to find out whether and when the diversification strategy is useful, th
     \item for each instance, for each nit, list the nigs that lead to an improvement when compared to smaller nigs and the respective percentile improvement;
     \item for each instance, consider the ratio of the improving nigs with the used nit and for each ratio compute the average improvement.
 \end{enumerate}
+
+The ratio between nit and nig is relevant, since it determines how many diversification steps can be performed at most.
 
 \begin{figure}
     \centering
@@ -426,7 +457,7 @@ In order to find out whether and when the diversification strategy is useful, th
     \label{fig:div}
 \end{figure}
 
-In Figure \ref{fig:div}, we can see that in average increasing the nig almost always leads to an improvement in the solution.
+In Figure \ref{fig:div}, we can see that in average increasing the nig/nit ratio almost always leads to an improvement in the solution.
 On the other hand, the higher the nig, the longer the execution time, for obvious reasons.
 
 Note that for most problem sizes, the best improvement is when the ratio is $3.5$, while for higher or lower values -except for a few lucky or unlucky exceptions- the improvement isn't higher than $1\%$.
