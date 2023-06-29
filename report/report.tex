@@ -358,7 +358,7 @@ Then
 \end{align*}
 
 \paragraph{Exact Method Configuration}
-The exact method has been executed once on each instance using a 10 minutes timeout.
+The exact method has been executed once on each instance using a 30 minutes timeout.
 
 \paragraph{Results}
 For each instance $X$, the results have been stored in two files:
@@ -463,6 +463,120 @@ On the other hand, the higher the nig, the longer the execution time, for obviou
 Note that for most problem sizes, the best improvement is when the ratio is $3.5$, while for higher or lower values -except for a few lucky or unlucky exceptions- the improvement isn't higher than $1\%$.
 
 Further experiments should be performed in order to find an upper bound to the nig/nit ratio after which no improvement are achieved.
+
+\subsection{Method Comparison}
+In order to compare the two methods, all the results of the exact methods have been considered, while, for the tabu method, only the configuration with maximal tabu size and nig/nit ratio have been considered.
+See Section \ref{sec:exp:res} for more details on the configurations.
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{loglogaxis}[
+                name=main,
+                title=Exact vs Heuristic method comparison,
+                xlabel=Time (s),
+                ylabel=solution/incumbent,
+                log ticks with fixed point,
+                extra x ticks={1800},
+                extra x tick labels={},
+                extra x tick style={grid=major},
+                extra y ticks={1,1.5},
+                extra y tick labels={,3/2},
+                extra y tick style={grid=major},
+                legend pos=north west,
+                cycle multiindex* list={
+                        [samples of colormap={8} of hot]\nextlist
+                        mark list\nextlist
+                        {solid,dashed,densely dashdotted}\nextlist
+                    },
+            ]
+            \foreach \n in {60,90,...,240,250} {
+                    \addplot+[
+                        only marks,
+                        each nth point=3,
+                        forget plot,
+                    ] table {data/opt_\n.dat};
+                    \addplot+[
+                        mark phase=1000,
+                        each nth point=8,
+                    ] table {data/heu_\n.dat};
+                    \addlegendentryexpanded{$n=\n$};
+                }
+            \coordinate (a) at (axis cs:.15,1);
+            \coordinate (b) at (axis cs:80,1.25);
+        \end{loglogaxis}
+        \begin{loglogaxis}[
+                name=zoom,
+                at={(main.outer south east)},
+                yshift=-1em,
+                anchor=outer north east,
+                width=0.8\textwidth,
+                height=0.5\textwidth,
+                xlabel=Time (s),
+                ylabel=solution/incumbent,
+                log ticks with fixed point,
+                xmin=.15,xmax=80,
+                ymin=1,ymax=1.25,
+                ytick={1,1.05,1.1,1.15,1.2},
+                extra x ticks={.2,.5,2,5,20,50},
+                extra x tick labels={0.2,0.5,2,5,20,50},
+                cycle multiindex* list={
+                        [samples of colormap={8} of hot]\nextlist
+                        mark list\nextlist
+                        {solid,dashed,densely dashdotted}\nextlist
+                    },
+            ]
+            \foreach \n in {60,90,...,240,250} {
+                    \addplot+[
+                        no marks,
+                        each nth point=8,
+                    ] table {data/heu_\n.dat};
+                }
+        \end{loglogaxis}
+        \draw[black!25] (a) rectangle (b);
+        \draw [dashed,black!25] (a) -- (zoom.south west);
+        \draw [dashed,black!25] (b) -- (zoom.north east);
+    \end{tikzpicture}
+    \caption{
+        In the first graph, the single points represent the results of the exact method.
+        Their color and shape depends on the size of the instance.
+        \\
+        The lines represent the results of the heuristic method.
+        There is one line per size of the instances, as described in the legend.
+        \\
+        The bottom graph, is a zoom in on the top graph to better visualize the heuristic results.
+        \\
+        Only some instances are shown in order to not overcrowd the plot.
+    }
+    \label{fig:comparison}
+\end{figure}
+
+In Figure \ref{fig:comparison}, the points on the bottom and on the right represent the exact method results.
+While the lines in the bottom left of the graph represent the results of the heuristic methods, one color and style per instance size. Each point on each line represent a different configuration.
+
+\paragraph{}
+We can see that for the sizes between 60 and 90 the exact method has been able to find the optimal solution before the timeout.
+In these cases, of course, the exact solution is better than the heuristic one.
+On the other hand the exact method is much faster, around 100 times faster.
+Furthermore, the approximation gap is at most 6\% and most of the time way lower.
+
+Clearly, the bigger the size, the longer the execution of both methods is and the bigger the approximation gap is.
+
+\paragraph{}
+Instead, for sizes equal to or greater than 100, the exact method hasn't been able to terminate.
+Therefore, all these results are on the 1800 vertical line, with different approximations.
+
+Predictably, the bigger the instance, the higher the approximation is, for both methods.
+It's easy to note, though, that the approximation of the exact method is much worse than the one of the heuristic method.
+
+Note that for the instances bigger than 120, the results of the exact method are worse than the ones found by the Christofides algorithm.
+
+\paragraph{}
+In the second plot, we can the approximation gap of the heuristic method doesn't seem to decrease as time increases, as could be expected.
+This is due to the fact that time is strictly bound to the maximum number of non increasing iterations (nig), which in the results that we considered is strictly related to the maximum number of non increasing tabu iterations (nit).
+Increasing the nit doesn't necessarily lead to better solutions, therefore in our set of results an higher nig and a longer time don't necessarily lead to better results.
+
+\paragraph{}
+In conclusion we can say that, unless, we are highly confident that the exact algorithm concludes before the timeout, the heuristic method is approximately two orders of magnitude faster and yields better results.
 
 % \nocite{*}
 \printbibliography
